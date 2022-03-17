@@ -1,0 +1,16 @@
+debug/graphicsscene.o
+debug/logical_element_properties.o
+debug/logicalelement.o
+debug/main.o
+debug/mainwindow.o
+debug/methods.o
+debug/net.o
+debug/set_logic_level.o
+debug/truthtable.o
+debug/qrc_resources.o
+debug/qrc_qmake_qmake_qm_files.o
+debug/moc_graphicsscene.o
+debug/moc_logical_element_properties.o
+debug/moc_logicalelement.o
+debug/moc_mainwindow.o
+debug/moc_set_logic_level.o

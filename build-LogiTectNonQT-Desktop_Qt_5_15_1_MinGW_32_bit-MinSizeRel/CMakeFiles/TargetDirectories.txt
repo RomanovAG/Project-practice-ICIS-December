@@ -1,0 +1,3 @@
+D:/Programs/LogiTect/LogiTect/build-LogiTectNonQT-Desktop_Qt_5_15_1_MinGW_32_bit-MinSizeRel/CMakeFiles/LogiTectNonQT.dir
+D:/Programs/LogiTect/LogiTect/build-LogiTectNonQT-Desktop_Qt_5_15_1_MinGW_32_bit-MinSizeRel/CMakeFiles/edit_cache.dir
+D:/Programs/LogiTect/LogiTect/build-LogiTectNonQT-Desktop_Qt_5_15_1_MinGW_32_bit-MinSizeRel/CMakeFiles/rebuild_cache.dir

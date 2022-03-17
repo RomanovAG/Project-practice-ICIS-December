@@ -1,0 +1,26 @@
+# ninja log v5
+3	1099	6681954208556836	CMakeFiles/LogiTectNonQT.dir/main.cpp.obj	323530b90cd0dda5
+5	567	6681834962605639	CMakeFiles/LogiTectNonQT.dir/logicalelement.cpp.obj	a2333566e0138560
+845	1042	6681972415929691	LogiTectNonQT.exe	abdb7612d391f6a3
+1	87	6678175451516788	build.ninja	685ce0734d2f7096
+3	845	6681972414006166	CMakeFiles/LogiTectNonQT.dir/methods.cpp.obj	7e66bdb52646d29f
+5	62	6670772374266097	CMakeFiles/LogiTectNonQT.dir/net.cpp.obj	297d40f1a4b3f8c8
+5	266	6681972408241223	CMakeFiles/LogiTectNonQT.dir/menu.cpp.obj	c7581d5969dd73ac
+2	783	6681985351764962	CMakeFiles/LogiTectNonQT.dir/methods.cpp.obj	7e66bdb52646d29f
+784	960	6681985353499164	LogiTectNonQT.exe	abdb7612d391f6a3
+3	949	6681992522471207	CMakeFiles/LogiTectNonQT.dir/methods.cpp.obj	7e66bdb52646d29f
+950	1134	6681992524285146	LogiTectNonQT.exe	abdb7612d391f6a3
+3	873	6681994951220022	CMakeFiles/LogiTectNonQT.dir/methods.cpp.obj	7e66bdb52646d29f
+874	1072	6681994953165427	LogiTectNonQT.exe	abdb7612d391f6a3
+3	941	6682002200577416	CMakeFiles/LogiTectNonQT.dir/methods.cpp.obj	7e66bdb52646d29f
+941	1106	6682002202202790	LogiTectNonQT.exe	abdb7612d391f6a3
+3	919	6682004401074241	CMakeFiles/LogiTectNonQT.dir/methods.cpp.obj	7e66bdb52646d29f
+919	1110	6682004402954706	LogiTectNonQT.exe	abdb7612d391f6a3
+3	467	6682005257841792	CMakeFiles/LogiTectNonQT.dir/logicalelement.cpp.obj	a2333566e0138560
+468	626	6682005259396805	LogiTectNonQT.exe	abdb7612d391f6a3
+3	919	6682008278848840	CMakeFiles/LogiTectNonQT.dir/methods.cpp.obj	7e66bdb52646d29f
+919	1116	6682008280772384	LogiTectNonQT.exe	abdb7612d391f6a3
+3	866	6682009507279464	CMakeFiles/LogiTectNonQT.dir/methods.cpp.obj	7e66bdb52646d29f
+866	1056	6682009509133237	LogiTectNonQT.exe	abdb7612d391f6a3
+2	748	6682018422367382	CMakeFiles/LogiTectNonQT.dir/methods.cpp.obj	7e66bdb52646d29f
+749	916	6682018424016446	LogiTectNonQT.exe	abdb7612d391f6a3

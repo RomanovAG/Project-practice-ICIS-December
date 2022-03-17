@@ -1,19 +1,25 @@
 #ifndef CLASSES_H
 #define CLASSES_H
+#include <QtWidgets>
 #include "logictypes.h"
 #include <vector>
 #include <tuple>
+#include <cmath>
+#include <iostream>
+
+typedef unsigned char level_t;
+typedef level_t value_t;
+typedef unsigned long long id_t;
+typedef unsigned short ionum_t;
+typedef unsigned int rows_t;
+typedef unsigned long long ticker_t;
+typedef unsigned short delay_t;
 
 extern ticker_t ticker;
 
 class LogicalElement;
+//class TruthTable;
 class Net;
-
-std::vector<LogicalElement> all_elements;
-std::vector<Net> all_nets;
-std::vector<std::tuple<id_t, value_t>> global_inputs;
-std::vector<std::tuple<id_t, value_t>> global_outputs;
-
 
 class Temp
 {
@@ -28,6 +34,7 @@ public:
     }
 };
 
+/*
 class TruthTable
 {
 public:
@@ -45,29 +52,38 @@ public:
     void setTT(level_t logic_level, ionum_t input_num, ionum_t output_num);
     std::vector<value_t> getOutput(rows_t row);
     void calculateTT();
-};
+};*/
 
-class LogicalElement
-{
-public:
-    id_t L_ID;
-    delay_t L_delay;
-    std::vector<ionum_t> L_inputs_addr, L_outputs_addr;
-    std::vector<value_t> L_inputs, L_outputs;
-    std::vector<Temp> temps;
-    bool is_visible;
+//class LogicalElement
+//{
+//public:
+//    id_t L_ID;
+//    delay_t L_delay;
+//    std::vector<ionum_t> L_inputs_addr, L_outputs_addr;
+//    std::vector<value_t> L_inputs, L_outputs;
+//    std::vector<Temp> temps;
 
-    LogicalElement(id_t el_num, delay_t delay, ionum_t inum, ionum_t onum)
-    {
-        L_ID = el_num;
-        L_delay = delay;
-        L_inputs.resize(inum);
-        L_outputs.resize(onum);
-    }
-    void findFreeInputs();
-    void findFreeOutputs();
-    void updateOutputs(level_t logic_level, std::vector<std::vector<value_t>> outputs);
-};
+//    std::vector<std::vector<value_t>> T_outputs;
+
+//    bool is_visible;
+//    QPainterPath image;
+//    LogicalElement(id_t id, delay_t delay, ionum_t inum, ionum_t onum)
+//    {
+//        L_ID = id;
+//        L_delay = delay;
+//        L_inputs.resize(inum);
+//        L_outputs.resize(onum);
+//    }
+//    void updateDelay();
+//    void findFreeInputs();
+//    void findFreeOutputs();
+//    void updateOutputs(level_t logic_level, std::vector<std::vector<value_t>> outputs);
+
+//    void setTT(level_t logic_level, ionum_t input_num, ionum_t output_num);
+//    std::vector<value_t> getOutput(std::vector<value_t> L_inputs);
+//    void calculateTT();
+//};
+
 
 class Net
 {
@@ -80,9 +96,9 @@ public:
 
     bool is_visible;
 
-    Net(std::tuple<id_t, ionum_t> start, std::tuple<id_t, ionum_t> end, delay_t delay)
+    Net(id_t id, std::tuple<id_t, ionum_t> start, std::tuple<id_t, ionum_t> end, delay_t delay)
     {
-        Net_ID = all_nets.size();
+        Net_ID = id;
         start_addr = start;
         end_addr = end;
         net_delay = delay;

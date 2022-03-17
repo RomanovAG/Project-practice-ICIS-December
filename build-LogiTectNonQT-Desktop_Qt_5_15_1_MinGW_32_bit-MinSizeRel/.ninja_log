@@ -1,0 +1,8 @@
+# ninja log v5
+0	947	6670114573606134	CMakeFiles/LogiTectNonQT.dir/main.cpp.obj	11d44bc6ed94eb81
+2	43	6670114925109786	CMakeFiles/LogiTectNonQT.dir/logicalelement.cpp.obj	e56f8738684fc90b
+3	98	6670115755391921	LogiTectNonQT.exe	983855562bc3df53
+0	87	6670115855910302	build.ninja	f762523196b489b5
+5	44	6670115424865851	CMakeFiles/LogiTectNonQT.dir/net.cpp.obj	76e948611ea244da
+3	340	6670115848270348	CMakeFiles/LogiTectNonQT.dir/methods.cpp.obj	e07e10b2616a702c
+4	1199	6670116278656785	CMakeFiles/LogiTectNonQT.dir/main.cpp.obj	11d44bc6ed94eb81

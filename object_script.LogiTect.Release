@@ -1,0 +1,16 @@
+release/graphicsscene.o
+release/logical_element_properties.o
+release/logicalelement.o
+release/main.o
+release/mainwindow.o
+release/methods.o
+release/net.o
+release/set_logic_level.o
+release/truthtable.o
+release/qrc_resources.o
+release/qrc_qmake_qmake_qm_files.o
+release/moc_graphicsscene.o
+release/moc_logical_element_properties.o
+release/moc_logicalelement.o
+release/moc_mainwindow.o
+release/moc_set_logic_level.o
