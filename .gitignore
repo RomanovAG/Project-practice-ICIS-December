@@ -1,6 +1,17 @@
 # Prerequisites
 *.d
 
+*.user
+*.json
+*.stash
+*.qrc
+release/
+debug/
+build-LogiTectNonQT-Desktop_Qt_5_15_1_MinGW_32_bit-Debug/
+build-LogiTectNonQT-Desktop_Qt_5_15_1_MinGW_32_bit-MinSizeRel/
+*.Debug
+*.Release
+
 # Compiled Object files
 *.slo
 *.lo
