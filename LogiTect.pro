@@ -10,33 +10,41 @@ CONFIG += c++11
 
 SOURCES += \
     graphicsscene.cpp \
+    input_output.cpp \
+    input_output_properties.cpp \
     logical_element_properties.cpp \
     logicalelement.cpp \
     main.cpp \
     mainwindow.cpp \
-    #methods.cpp \
     methods.cpp \
     net.cpp \
+    net_properties.cpp \
     set_logic_level.cpp \
     truthtable.cpp
 
 HEADERS += \
     classes.h \
     graphicsscene.h \
+    input_output.h \
+    input_output_properties.h \
     logical_element_properties.h \
     logicalelement.h \
     logictypes.h \
     mainwindow.h \
     methods.h \
+    net.h \
+    net_properties.h \
     set_logic_level.h
 
 FORMS += \
+    input_output_properties.ui \
     logical_element_properties.ui \
     mainwindow.ui \
+    net_properties.ui \
     set_logic_level.ui
 
-#TRANSLATIONS += \
- #   LogiTect_ru_RU.ts
+TRANSLATIONS += \
+    LogiTect_ru_RU.ts
 CONFIG += lrelease
 CONFIG += embed_translations
 

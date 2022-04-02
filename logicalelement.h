@@ -13,11 +13,11 @@ public:
     ~LogicalElement();
 
 signals:
-    void itemPtr(LogicalElement *ptr);
+    void connectSignal(std::vector<id_t> ids);
+    void coordsSignal(QPointF pos);
 
 private:
-    int width;
-    int height;
+
     QRectF boundingRect() const;
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
     void mouseMoveEvent(QGraphicsSceneMouseEvent *event);
@@ -26,8 +26,12 @@ private:
     void mouseReleaseEvent(QGraphicsSceneMouseEvent *event);
 
 public slots:
+    void propSlot(QString name, ionum_t inum, ionum_t onum, std::vector<std::vector<value_t>> output_table);
 
 public:
+    bool is_connector = false;
+    qreal width;
+    qreal height;
     Logical_Element_Properties form_LEP;
     id_t L_ID;
     QString L_name;
@@ -36,6 +40,7 @@ public:
     //std::vector<Temp> temps;
 
     std::vector<std::vector<value_t>> T_outputs;
+    std::vector<value_t> getOutput(level_t logic_level, std::vector<value_t> L_inputs);
 };
 
 #endif // LOGICALELEMENT_H

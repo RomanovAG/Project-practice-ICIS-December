@@ -3,7 +3,8 @@
 
 #include <QMainWindow>
 #include <QGraphicsScene>
-#include "logicalelement.h"
+#include <QtWidgets>
+//#include "logicalelement.h"
 #include "logical_element_properties.h"
 #include "set_logic_level.h"
 #include "logictypes.h"
@@ -21,8 +22,6 @@ private:
 public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
-    void paintEvent(QPaintEvent *event);
-    void wheelEvent(QWheelEvent *event);
 
 private slots:
 
@@ -30,14 +29,29 @@ private slots:
 
     void on_actionSet_logic_level_triggered();
 
+    void on_addNet_clicked();
+
+    void on_pushButton_2_clicked();
+
+    void on_notButton_clicked();
+
+    void on_andButton_clicked();
+
+    void on_orButton_clicked();
+
+    void on_addInOut_clicked();
+
+    void on_connector_clicked();
+
 public slots:
 
     void onLogicLevelChanged(level_t value);
+
+    void connectSlot(std::vector<id_t> ids);
 
 public:
     Ui::MainWindow *ui;
     QGraphicsScene *scene;
     Set_logic_level form_SLL;
-    //Logical_Element_Properties form_LEP;
 };
 #endif // MAINWINDOW_H

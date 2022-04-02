@@ -8,7 +8,7 @@ Set_logic_level::Set_logic_level(QWidget *parent) :
     ui(new Ui::Set_logic_level)
 {
     ui->setupUi(this);
-    setWindowTitle("");
+    this->setWindowTitle("");
     ui->spinBox->setMinimum(2);
     ui->spinBox->setMaximum(255);
     this->setFixedSize(215, 91);
@@ -26,9 +26,8 @@ void Set_logic_level::on_pushButton_clicked()
     this->close();
 }
 
-
 void Set_logic_level::on_cancel_clicked()
 {
-    close();
+    this->close();
 }
 

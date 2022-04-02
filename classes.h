@@ -7,19 +7,11 @@
 #include <cmath>
 #include <iostream>
 
-typedef unsigned char level_t;
-typedef level_t value_t;
-typedef unsigned long long id_t;
-typedef unsigned short ionum_t;
-typedef unsigned int rows_t;
-typedef unsigned long long ticker_t;
-typedef unsigned short delay_t;
-
 extern ticker_t ticker;
 
-class LogicalElement;
+//class LogicalElement;
 //class TruthTable;
-class Net;
+//class Net;
 
 class Temp
 {
@@ -85,26 +77,26 @@ public:
 //};
 
 
-class Net
-{
-public:
-    id_t Net_ID;
-    std::tuple<id_t, ionum_t> start_addr, end_addr;
-    delay_t net_delay;
-    value_t previous_value, current_value;
-    std::vector<Temp> temps;
+//class Net
+//{
+//public:
+//    id_t Net_ID;
+//    std::tuple<id_t, ionum_t> start_addr, end_addr;
+//    delay_t net_delay;
+//    value_t previous_value, current_value;
+//    std::vector<Temp> temps;
 
-    bool is_visible;
+//    bool is_visible;
 
-    Net(id_t id, std::tuple<id_t, ionum_t> start, std::tuple<id_t, ionum_t> end, delay_t delay)
-    {
-        Net_ID = id;
-        start_addr = start;
-        end_addr = end;
-        net_delay = delay;
-    }
-    void writeToTemp(value_t new_value, ticker_t t);
-    void updateValue();
-};
+//    Net(id_t id, std::tuple<id_t, ionum_t> start, std::tuple<id_t, ionum_t> end, delay_t delay)
+//    {
+//        Net_ID = id;
+//        start_addr = start;
+//        end_addr = end;
+//        net_delay = delay;
+//    }
+//    void writeToTemp(value_t new_value, ticker_t t);
+//    void updateValue();
+//};
 
 #endif // CLASSES_H

@@ -1,2 +1,10 @@
-<!DOCTYPE RCC>
-<RCC version="1.0"/>
+<RCC>
+    <qresource prefix="/res">
+        <file>resources/edit_pencil_write_1574.png</file>
+        <file>resources/information_info_1565.png</file>
+        <file>resources/new-file_40454.png</file>
+        <file>resources/open-file_40455.png</file>
+        <file>resources/Save_37110.png</file>
+        <file>resources/Save-as_37111.png</file>
+    </qresource>
+</RCC>
