@@ -15,6 +15,7 @@
 #include <QtWidgets/QFrame>
 #include <QtWidgets/QGridLayout>
 #include <QtWidgets/QLabel>
+#include <QtWidgets/QPushButton>
 #include <QtWidgets/QSpacerItem>
 #include <QtWidgets/QSpinBox>
 #include <QtWidgets/QWidget>
@@ -36,6 +37,7 @@ public:
     QLabel *label;
     QLabel *label_2;
     QFrame *line;
+    QPushButton *delButton;
 
     void setupUi(QWidget *Input_Output_Properties)
     {
@@ -101,6 +103,11 @@ public:
 
         gridLayout->addWidget(line, 3, 2, 1, 4);
 
+        delButton = new QPushButton(Input_Output_Properties);
+        delButton->setObjectName(QString::fromUtf8("delButton"));
+
+        gridLayout->addWidget(delButton, 5, 2, 1, 1);
+
 
         retranslateUi(Input_Output_Properties);
 
@@ -114,6 +121,7 @@ public:
         label_3->setText(QCoreApplication::translate("Input_Output_Properties", "Output", nullptr));
         label->setText(QCoreApplication::translate("Input_Output_Properties", "Value", nullptr));
         label_2->setText(QCoreApplication::translate("Input_Output_Properties", "Input", nullptr));
+        delButton->setText(QCoreApplication::translate("Input_Output_Properties", "Delete", nullptr));
     } // retranslateUi
 
 };

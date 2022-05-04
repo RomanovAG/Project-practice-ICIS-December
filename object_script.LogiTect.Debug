@@ -1,3 +1,4 @@
+debug/el_to_save_form.o
 debug/graphicsscene.o
 debug/input_output.o
 debug/input_output_properties.o
@@ -12,6 +13,7 @@ debug/set_logic_level.o
 debug/truthtable.o
 debug/qrc_resources.o
 debug/qrc_qmake_qmake_qm_files.o
+debug/moc_el_to_save_form.o
 debug/moc_graphicsscene.o
 debug/moc_input_output.o
 debug/moc_input_output_properties.o

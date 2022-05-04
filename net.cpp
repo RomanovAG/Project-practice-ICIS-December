@@ -1,8 +1,8 @@
 #include "net.h"
 #include "logictypes.h"
 #include "methods.h"
-#include <stdlib.h>
 #include "logicalelement.h"
+#include "temp.h"
 
 extern std::vector<LogicalElement *> all_elements;
 
@@ -13,13 +13,11 @@ Net::Net(QObject *parent)
     QObject::connect(this, &Net::connectSignal, &this->form_NP, &Net_Properties::addrChangedSlot);
     start_pos = QPoint(10, 10);
     end_pos = QPoint(100, 200);
+    this->value = 0;
     this->thickness = 2;
 }
 
-Net::~Net()
-{
-
-}
+Net::~Net() {}
 
 void Net::showForm()
 {

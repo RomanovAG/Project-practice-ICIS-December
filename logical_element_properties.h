@@ -18,6 +18,10 @@ public:
 
 signals:
     void propSignal(QString name, ionum_t inum, ionum_t onum, std::vector<std::vector<value_t>> output_table);
+    void delSignal();
+
+public slots:
+    void propSlot(QString name, ionum_t inum, ionum_t onum, std::vector<std::vector<value_t>> output_table);
 
 private slots:
 
@@ -28,6 +32,8 @@ private slots:
     void on_inputNumBox_valueChanged(int arg1);
 
     void on_outputNumBox_valueChanged(int arg1);
+
+    void on_delButton_clicked();
 
 private:
     Ui::Logical_Element_Properties *ui;

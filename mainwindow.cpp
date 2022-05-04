@@ -1,40 +1,44 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
-#include <QtWidgets>
+//#include <QtWidgets>
 #include "logictypes.h"
 #include "logicalelement.h"
 #include "net.h"
 #include "input_output.h"
 #include "methods.h"
-#include "graphicsscene.h"
+#include "el_to_save_form.h"
 using namespace std;
 
+extern vector<id_t> inputs_ids, outputs_ids;
+long el_index_to_save;
+QString lib_file;
+
+extern QString current_file;
 extern level_t logic_level;
 extern vector<LogicalElement *> all_elements;
 extern vector<Input_Output *> all_inOutputs;
 extern vector<Net *> all_nets;
 
-static int randomBetween(int low, int high)
-{
-    return (QRandomGenerator::global()->generate() % ((high + 1) - low) + low);
-}
-
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
 {
+    lib_file = "";
+    el_index_to_save = -1;
     QObject::connect(&this->form_SLL, &Set_logic_level::logicLevelChanged, this, &MainWindow::onLogicLevelChanged);
+    QObject::connect(&this->form_ETS, &el_to_save_form::box_value, this, &MainWindow::saveElById);
     ui->setupUi(this);
     QString title = "LogiTect";
-    //title = title + QString::number(logic_level);
+    if (current_file != "")
+        title = "LogiTect | " + current_file;
     setWindowTitle(title);
-    logic_status = new QLabel(this);
-    logic_status->setText("Logic level: undefined");
+    this->logic_status = new QLabel(this);
+    this->logic_status->setText("Logic level: undefined");
     ui->statusBar->addWidget(logic_status, 1);
     this->resize(1280,720);
 
-    scene = new GraphicsScene(this);
-    scene->setItemIndexMethod(QGraphicsScene::NoIndex);
+    this->scene = new QGraphicsScene(this);
+    this->scene->setItemIndexMethod(QGraphicsScene::NoIndex);
 
     ui->graphicsView->setMinimumSize(500, 500);
     ui->graphicsView->setScene(scene);
@@ -42,12 +46,11 @@ MainWindow::MainWindow(QWidget *parent)
     ui->graphicsView->setCacheMode(QGraphicsView::CacheBackground);
     ui->graphicsView->setViewportUpdateMode(QGraphicsView::BoundingRectViewportUpdate);
     scene->setSceneRect(QRect(0, 0, 1920, 1080));
-    //Cache *cache = new Cache;
-    //scene->addItem(cache);
+
     for (auto i = 0; i <= 1920; i += 40)
-        scene->addLine(i, 0, i, 1080, QPen(Qt::darkGray));
+        this->scene->addLine(i, 0, i, 1080, QPen(Qt::darkGray));
     for (auto i = 0; i <= 1080; i += 40)
-        scene->addLine(0, i, 1920, i, QPen(Qt::darkGray));
+        this->scene->addLine(0, i, 1920, i, QPen(Qt::darkGray));
     ui->tab->setEnabled(false);
     ui->pushButton->setEnabled(false);
     ui->addNet->setEnabled(false);
@@ -55,8 +58,7 @@ MainWindow::MainWindow(QWidget *parent)
     ui->connector->setEnabled(false);
 }
 
-MainWindow::~MainWindow() {
-    delete ui; }
+MainWindow::~MainWindow() { delete ui; }
 
 void MainWindow::connectSlot(std::vector<id_t> ids)
 {
@@ -66,7 +68,7 @@ void MainWindow::connectSlot(std::vector<id_t> ids)
     net->start_addr.first = ids[0];
     net->end_addr.first = ids[1];
     net->showForm();
-    scene->addItem(net);
+    this->scene->addItem(net);
     all_nets.push_back(net);
     if (all_nets.size() > 1)
         sort(all_nets.begin(), all_nets.end(), compNID);
@@ -77,16 +79,64 @@ void MainWindow::connectSlot(std::vector<id_t> ids)
     }
 }
 
+void MainWindow::delElSlot(id_t ID)
+{
+    qDebug() << "del";
+    for (size_t i = 0; i < all_inOutputs.size(); i++)
+        if (all_inOutputs[i]->addr.first == ID)
+        {
+            this->scene->removeItem(all_inOutputs[i]);
+            all_inOutputs.erase(isIOIDExist(all_inOutputs[i]->IO_ID));
+            i--;
+        }
+    for (size_t i = 0; i < all_nets.size(); i++)
+        if (all_nets[i]->start_addr.first == ID || all_nets[i]->end_addr.first == ID)
+        {
+            this->scene->removeItem(all_nets[i]);
+            all_nets.erase(isNIDExist(all_nets[i]->Net_ID));
+            i--;
+        }
+    QObject::disconnect(*isLIDExist(ID), &LogicalElement::connectSignal, this, &MainWindow::connectSlot);
+    QObject::disconnect(*isLIDExist(ID), &LogicalElement::delSignal, this, &MainWindow::delElSlot);
+    this->scene->removeItem(*isLIDExist(ID));
+    all_elements.erase(isLIDExist(ID));
+    for (size_t i = 0; i < all_elements.size(); i++)
+        all_elements[i]->update();
+}
+
+void MainWindow::delIOSlot(id_t ID)
+{
+    QObject::disconnect(*isIOIDExist(ID), &Input_Output::delSignal, this, &MainWindow::delIOSlot);
+    this->scene->removeItem(*isIOIDExist(ID));
+    all_inOutputs.erase(isIOIDExist(ID));
+}
+
+void MainWindow::saveElById(id_t ID)
+{
+    el_index_to_save = returnLID(all_elements, ID);
+    if (el_index_to_save > -1)
+        saveToLib(lib_file, all_elements[el_index_to_save]);
+    else
+    {
+        QMessageBox message;
+        message.warning(this, "Warning", "No such element");
+        message.show();
+    }
+    el_index_to_save = -1;
+    lib_file = "";
+}
+
 void MainWindow::on_pushButton_clicked()
 {
     LogicalElement *el = new LogicalElement;
     el->L_ID = findLID(all_elements);
     QObject::connect(el, &LogicalElement::connectSignal, this, &MainWindow::connectSlot);
+    QObject::connect(el, &LogicalElement::delSignal, this, &MainWindow::delElSlot);
     all_elements.push_back(el);
     if (all_elements.size() > 1)
         sort(all_elements.begin(), all_elements.end(), compLID);
     el->setPos(randomBetween(30, 200), randomBetween(30, 200));
-    scene->addItem(el);
+    this->scene->addItem(el);
     ui->addNet->setEnabled(true);
     ui->addInOut->setEnabled(true);
 }
@@ -102,7 +152,7 @@ void MainWindow::on_addNet_clicked()
     if (all_nets.size() > 1)
         sort(all_nets.begin(), all_nets.end(), compNID);
     net->form_NP.show();
-    scene->addItem(net);
+    this->scene->addItem(net);
 }
 
 void MainWindow::on_actionSet_logic_level_triggered()
@@ -128,12 +178,6 @@ void MainWindow::onLogicLevelChanged(level_t value)
     ui->connector->setEnabled(true);
 }
 
-void MainWindow::on_pushButton_2_clicked()
-{
-    updateScheme();
-}
-
-
 void MainWindow::on_notButton_clicked()
 {
     LogicalElement *el = new LogicalElement;
@@ -141,11 +185,12 @@ void MainWindow::on_notButton_clicked()
     el->height = 60;
     el->width = 60;
     QObject::connect(el, &LogicalElement::connectSignal, this, &MainWindow::connectSlot);
+    QObject::connect(el, &LogicalElement::delSignal, this, &MainWindow::delElSlot);
     all_elements.push_back(el);
     if (all_elements.size() > 1)
         sort(all_elements.begin(), all_elements.end(), compLID);
     el->setPos(randomBetween(30, 200), randomBetween(30, 200));
-    scene->addItem(el);
+    this->scene->addItem(el);
     ui->addNet->setEnabled(true);
     ui->addInOut->setEnabled(true);
     {
@@ -158,12 +203,8 @@ void MainWindow::on_notButton_clicked()
         auto output_num = el->L_outputs.size();
         auto rows = (rows_t) pow(logic_level, input_num);
         for (unsigned row = 0; row < rows; row++)
-        {
             for (unsigned column = 0; column < output_num; column++)
-            {
                 el->T_outputs[row][column] = !row;
-            }
-        }
     }
 }
 
@@ -173,11 +214,12 @@ void MainWindow::on_andButton_clicked()
     LogicalElement *el = new LogicalElement;
     el->L_ID = findLID(all_elements);
     QObject::connect(el, &LogicalElement::connectSignal, this, &MainWindow::connectSlot);
+    QObject::connect(el, &LogicalElement::delSignal, this, &MainWindow::delElSlot);
     all_elements.push_back(el);
     if (all_elements.size() > 1)
         sort(all_elements.begin(), all_elements.end(), compLID);
     el->setPos(randomBetween(30, 200), randomBetween(30, 200));
-    scene->addItem(el);
+    this->scene->addItem(el);
     ui->addNet->setEnabled(true);
     ui->addInOut->setEnabled(true);
     {
@@ -193,6 +235,7 @@ void MainWindow::on_andButton_clicked()
             el->T_outputs[i][0] = 0;
         el->T_outputs[3][0] = 1;
     }
+    qDebug() << all_elements.size();
 }
 
 
@@ -201,11 +244,12 @@ void MainWindow::on_orButton_clicked()
     LogicalElement *el = new LogicalElement;
     el->L_ID = findLID(all_elements);
     QObject::connect(el, &LogicalElement::connectSignal, this, &MainWindow::connectSlot);
+    QObject::connect(el, &LogicalElement::delSignal, this, &MainWindow::delElSlot);
     all_elements.push_back(el);
     if (all_elements.size() > 1)
         sort(all_elements.begin(), all_elements.end(), compLID);
     el->setPos(randomBetween(30, 200), randomBetween(30, 200));
-    scene->addItem(el);
+    this->scene->addItem(el);
     ui->addNet->setEnabled(true);
     ui->addInOut->setEnabled(true);
     {
@@ -228,12 +272,12 @@ void MainWindow::on_addInOut_clicked()
 {
     Input_Output *io = new Input_Output;
     io->IO_ID = findIOID(all_inOutputs);
-    //QObject::connect(io, &LogicalElement::connectSignal, this, &MainWindow::connectSlot);
+    QObject::connect(io, &Input_Output::delSignal, this, &MainWindow::delIOSlot);
     all_inOutputs.push_back(io);
     if (all_inOutputs.size() > 1)
         sort(all_inOutputs.begin(), all_inOutputs.end(), compIOID);
     io->setPos(randomBetween(30, 200), randomBetween(30, 200));
-    scene->addItem(io);
+    this->scene->addItem(io);
     io->formIOP.show();
 }
 
@@ -242,24 +286,142 @@ void MainWindow::on_connector_clicked()
     LogicalElement *el = new LogicalElement;
     el->L_ID = findLID(all_elements);
     el->is_connector = true;
+    QObject::connect(el, &LogicalElement::connectSignal, this, &MainWindow::connectSlot);
+    QObject::connect(el, &LogicalElement::delSignal, this, &MainWindow::delElSlot);
     all_elements.push_back(el);
     if (all_elements.size() > 1)
         sort(all_elements.begin(), all_elements.end(), compLID);
     el->setPos(randomBetween(30, 200), randomBetween(30, 200));
-    scene->addItem(el);
+    this->scene->addItem(el);
     ui->addNet->setEnabled(true);
     ui->addInOut->setEnabled(true);
-    auto rows = (rows_t) pow(logic_level, el->L_inputs.size());
-    vector<vector<value_t>> input_table (rows, vector<value_t> (el->L_inputs.size()));
-    for (unsigned i = 0; i < rows; i++)
-    {
-        auto current_row = i;
-        for (int j = el->L_inputs.size() - 1; j >= 0; j--)
-        {
-            input_table[i][j] = current_row % logic_level;
-            current_row /= logic_level;
-        }
-    }
+    vector<vector<value_t>> input_table = makeInputTable(el->L_inputs.size(), logic_level);
     el->T_outputs = input_table;
     el->update();
+}
+
+void MainWindow::on_actionOpen_triggered()
+{
+    if (all_elements.size() > 0 || all_inOutputs.size() > 0 || all_nets.size() > 0)
+    {
+        QMessageBox box;
+        box.warning(nullptr, "Warning", "Save your project, if you don't want to lose it");
+        box.show();
+    }
+    current_file = QFileDialog::getOpenFileName(this, NULL, NULL, "LogiTect project (*.ltp);; All Files (*)");
+    loadFile(current_file, this->scene, this);
+    QString title = "LogiTect | " + current_file;
+    this->setWindowTitle(title);
+}
+
+void MainWindow::on_actionSave_triggered()
+{
+    if (all_elements.size() == 0 && all_inOutputs.size() == 0 && all_nets.size() == 0 && current_file == "")
+    {
+        QMessageBox box;
+        box.information(nullptr, "Warning", "Nothing to save");
+        box.show();
+        return;
+    }
+    if (current_file == "")
+        current_file = QFileDialog::getSaveFileName(this, NULL, NULL, "LogiTect project (*.ltp);; All Files (*)");
+    saveFile(current_file);
+    QString title = "LogiTect | " + current_file;
+    this->setWindowTitle(title);
+}
+
+void MainWindow::on_actionSave_As_triggered()
+{
+    if (all_elements.size() == 0 && all_inOutputs.size() == 0 && all_nets.size() == 0)
+    {
+        QMessageBox box;
+        box.information(nullptr, "Warning", "Nothing to save");
+        box.show();
+        return;
+    }
+    current_file = QFileDialog::getSaveFileName(this, NULL, NULL, "LogiTect project (*.ltp);; All Files (*)");
+    saveFile(current_file);
+    QString title = "LogiTect | " + current_file;
+    this->setWindowTitle(title);
+}
+
+void MainWindow::on_updateButton_clicked()
+{
+    int iterations = updateScheme(MAX_ITERATIONS);
+    if (iterations == -1)
+    {
+        QMessageBox message;
+        message.critical(this, "Error", "Update timed out!");
+        message.show();
+    }
+}
+
+void MainWindow::on_simulateButton_clicked()
+{
+
+}
+
+void MainWindow::on_actionLoad_element_triggered()
+{
+    QString lib_file = QFileDialog::getOpenFileName(this, NULL, NULL, "LogiTect library (*.ltplib);; All Files (*)");
+    LogicalElement *el = loadFromLib(lib_file);
+    if (el == NULL)
+    {
+        qDebug() << "not loaded";
+        return;
+    }
+    qDebug() << "loaded";
+    el->L_ID = findLID(all_elements);
+    QObject::connect(el, &LogicalElement::connectSignal, this, &MainWindow::connectSlot);
+    QObject::connect(el, &LogicalElement::delSignal, this, &MainWindow::delElSlot);
+    all_elements.push_back(el);
+    if (all_elements.size() > 1)
+        sort(all_elements.begin(), all_elements.end(), compLID);
+    el->setPos(randomBetween(30, 200), randomBetween(30, 200));
+    this->scene->addItem(el);
+    ui->addNet->setEnabled(true);
+    ui->addInOut->setEnabled(true);
+}
+
+void MainWindow::on_actionSave_element_triggered()
+{
+    lib_file = QFileDialog::getSaveFileName(this, NULL, NULL, "LogiTect library (*.ltplib);; All Files (*)");
+    if (inputs_ids.size() == 0 || outputs_ids.size() == 0)
+    {
+        this->form_ETS.show();
+//        if (el_index_to_save > -1)
+//            saveToLib(lib_file, all_elements[el_index_to_save]);
+//        el_index_to_save = -1;
+    }
+    else
+    {
+        LogicalElement *el = convertToElement(inputs_ids, outputs_ids);
+        saveToLib(lib_file, el);
+        for (size_t i = 0; i < all_inOutputs.size(); i++)
+        {
+            all_inOutputs[i]->setOpacity(1);
+            all_inOutputs[i]->setScale(1);
+            all_inOutputs[i]->setCursor(QCursor(Qt::ArrowCursor));
+        }
+        inputs_ids.resize(0);
+        outputs_ids.resize(0);
+    }
+}
+
+void MainWindow::on_actionNew_project_triggered()
+{
+//    if (all_elements.size() > 0 || all_inOutputs.size() > 0 || all_nets.size() > 0)
+//    {
+//        QMessageBox box;
+//        box.warning(nullptr, "Warning", "Save your project, if you don't want to lose it");
+//        box.show();
+//    }
+    this->scene->clear();
+    for (auto i = 0; i <= 1920; i += 40)
+        this->scene->addLine(i, 0, i, 1080, QPen(Qt::darkGray));
+    for (auto i = 0; i <= 1080; i += 40)
+        this->scene->addLine(0, i, 1920, i, QPen(Qt::darkGray));
+    all_elements.resize(0);
+    all_nets.resize(0);
+    all_inOutputs.resize(0);
 }

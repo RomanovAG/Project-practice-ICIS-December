@@ -4,9 +4,10 @@
 #include <QMainWindow>
 #include <QGraphicsScene>
 #include <QtWidgets>
-//#include "logicalelement.h"
+
 #include "logical_element_properties.h"
 #include "set_logic_level.h"
+#include "el_to_save_form.h"
 #include "logictypes.h"
 
 QT_BEGIN_NAMESPACE
@@ -17,7 +18,6 @@ class MainWindow : public QMainWindow
 {
     Q_OBJECT
 private:
-    QLabel *logic_status;
 
 public:
     MainWindow(QWidget *parent = nullptr);
@@ -31,8 +31,6 @@ private slots:
 
     void on_addNet_clicked();
 
-    void on_pushButton_2_clicked();
-
     void on_notButton_clicked();
 
     void on_andButton_clicked();
@@ -43,15 +41,33 @@ private slots:
 
     void on_connector_clicked();
 
+    void on_actionOpen_triggered();
+
+    void on_updateButton_clicked();
+    void on_simulateButton_clicked();
+
+    void on_actionSave_triggered();
+
+    void on_actionSave_element_triggered();
+
+    void on_actionSave_As_triggered();
+
+    void on_actionNew_project_triggered();
+
+    void on_actionLoad_element_triggered();
+
 public slots:
-
     void onLogicLevelChanged(level_t value);
-
     void connectSlot(std::vector<id_t> ids);
+    void delElSlot(id_t ID);
+    void delIOSlot(id_t ID);
+    void saveElById(id_t ID);
 
 public:
     Ui::MainWindow *ui;
     QGraphicsScene *scene;
+    QLabel *logic_status;
     Set_logic_level form_SLL;
+    el_to_save_form form_ETS;
 };
 #endif // MAINWINDOW_H

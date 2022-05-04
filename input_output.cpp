@@ -1,9 +1,11 @@
 #include "input_output.h"
 #include "logicalelement.h"
 #include "methods.h"
+using namespace std;
 
 extern level_t logic_level;
-extern std::vector<LogicalElement *> all_elements;
+extern vector<LogicalElement *> all_elements;
+vector<id_t> inputs_ids, outputs_ids;
 
 Input_Output::Input_Output(QObject *parent)
     : QObject{parent}
@@ -12,6 +14,7 @@ Input_Output::Input_Output(QObject *parent)
     this->height = this->width / 2;
     this->value = 0;
     QObject::connect(&this->formIOP, &Input_Output_Properties::valueChanged, this, &Input_Output::propSlot);
+    QObject::connect(&this->formIOP, &Input_Output_Properties::delSignal, this, &Input_Output::delSlot);
 }
 
 Input_Output::~Input_Output() {}
@@ -45,9 +48,7 @@ void Input_Output::mousePressEvent(QGraphicsSceneMouseEvent *event)
             this->value = ++this->value % logic_level;
     }
     if (event->button() == Qt::RightButton)
-    {
         this->formIOP.show();
-    }
 }
 
 void Input_Output::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
@@ -57,17 +58,30 @@ void Input_Output::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
 //    emit coordsSignal(this->pos());
 }
 
-void Input_Output::mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event)
-{
-    Q_UNUSED(event);
-}
+//void Input_Output::mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event)
+//{
+//    Q_UNUSED(event);
+//}
 
 void Input_Output::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
 {
     Q_UNUSED(event);
-    this->setOpacity(1);
-    this->setScale(1);
-    this->setCursor(QCursor(Qt::ArrowCursor));
+    if (event->modifiers() == Qt::ShiftModifier)
+    {
+        qDebug() << "shift";
+        if (this->is_input == true)
+            inputs_ids.push_back(this->IO_ID);
+        else
+            outputs_ids.push_back(this->IO_ID);
+    }
+    else
+    {
+        inputs_ids.resize(0);
+        outputs_ids.resize(0);
+        this->setOpacity(1);
+        this->setScale(1);
+        this->setCursor(QCursor(Qt::ArrowCursor));
+    }
 }
 
 void Input_Output::propSlot(value_t value, id_t ID, ionum_t io_id, bool is_input)
@@ -111,3 +125,5 @@ void Input_Output::coordsSlot(QPointF pos)
         this->setPos(position);
     }
 }
+
+void Input_Output::delSlot() { emit delSignal(this->IO_ID); }

@@ -27,12 +27,15 @@ class Ui_Logical_Element_Properties
 {
 public:
     QGridLayout *gridLayout;
-    QLabel *label_3;
     QPushButton *OK;
     QVBoxLayout *verticalLayout;
     QLabel *label;
     QLabel *label_2;
     QFrame *line;
+    QPushButton *delButton;
+    QLabel *label_3;
+    QLineEdit *nameEdit;
+    QLabel *label_6;
     QVBoxLayout *verticalLayout_2;
     QSpinBox *inputNumBox;
     QSpinBox *outputNumBox;
@@ -42,8 +45,6 @@ public:
     QLabel *label_4;
     QLabel *label_5;
     QPushButton *Cancel;
-    QLabel *label_6;
-    QLineEdit *nameEdit;
 
     void setupUi(QWidget *Logical_Element_Properties)
     {
@@ -52,20 +53,10 @@ public:
         Logical_Element_Properties->resize(400, 300);
         gridLayout = new QGridLayout(Logical_Element_Properties);
         gridLayout->setObjectName(QString::fromUtf8("gridLayout"));
-        label_3 = new QLabel(Logical_Element_Properties);
-        label_3->setObjectName(QString::fromUtf8("label_3"));
-        QSizePolicy sizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
-        sizePolicy.setHorizontalStretch(0);
-        sizePolicy.setVerticalStretch(0);
-        sizePolicy.setHeightForWidth(label_3->sizePolicy().hasHeightForWidth());
-        label_3->setSizePolicy(sizePolicy);
-
-        gridLayout->addWidget(label_3, 4, 0, 1, 1);
-
         OK = new QPushButton(Logical_Element_Properties);
         OK->setObjectName(QString::fromUtf8("OK"));
 
-        gridLayout->addWidget(OK, 5, 1, 1, 1);
+        gridLayout->addWidget(OK, 5, 2, 1, 1);
 
         verticalLayout = new QVBoxLayout();
         verticalLayout->setObjectName(QString::fromUtf8("verticalLayout"));
@@ -91,7 +82,34 @@ public:
         line->setFrameShape(QFrame::HLine);
         line->setFrameShadow(QFrame::Sunken);
 
-        gridLayout->addWidget(line, 2, 0, 2, 3);
+        gridLayout->addWidget(line, 2, 0, 2, 4);
+
+        delButton = new QPushButton(Logical_Element_Properties);
+        delButton->setObjectName(QString::fromUtf8("delButton"));
+
+        gridLayout->addWidget(delButton, 5, 0, 1, 1);
+
+        label_3 = new QLabel(Logical_Element_Properties);
+        label_3->setObjectName(QString::fromUtf8("label_3"));
+        QSizePolicy sizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
+        sizePolicy.setHorizontalStretch(0);
+        sizePolicy.setVerticalStretch(0);
+        sizePolicy.setHeightForWidth(label_3->sizePolicy().hasHeightForWidth());
+        label_3->setSizePolicy(sizePolicy);
+
+        gridLayout->addWidget(label_3, 4, 0, 1, 1);
+
+        nameEdit = new QLineEdit(Logical_Element_Properties);
+        nameEdit->setObjectName(QString::fromUtf8("nameEdit"));
+        nameEdit->setFont(font);
+
+        gridLayout->addWidget(nameEdit, 0, 2, 1, 2);
+
+        label_6 = new QLabel(Logical_Element_Properties);
+        label_6->setObjectName(QString::fromUtf8("label_6"));
+        label_6->setFont(font);
+
+        gridLayout->addWidget(label_6, 0, 0, 1, 1);
 
         verticalLayout_2 = new QVBoxLayout();
         verticalLayout_2->setObjectName(QString::fromUtf8("verticalLayout_2"));
@@ -108,7 +126,7 @@ public:
         verticalLayout_2->addWidget(outputNumBox);
 
 
-        gridLayout->addLayout(verticalLayout_2, 1, 2, 1, 1);
+        gridLayout->addLayout(verticalLayout_2, 1, 3, 1, 1);
 
         gridLayout_2 = new QGridLayout();
         gridLayout_2->setObjectName(QString::fromUtf8("gridLayout_2"));
@@ -133,24 +151,12 @@ public:
         gridLayout_2->addWidget(label_5, 0, 1, 1, 1);
 
 
-        gridLayout->addLayout(gridLayout_2, 4, 1, 1, 2);
+        gridLayout->addLayout(gridLayout_2, 4, 2, 1, 2);
 
         Cancel = new QPushButton(Logical_Element_Properties);
         Cancel->setObjectName(QString::fromUtf8("Cancel"));
 
-        gridLayout->addWidget(Cancel, 5, 2, 1, 1);
-
-        label_6 = new QLabel(Logical_Element_Properties);
-        label_6->setObjectName(QString::fromUtf8("label_6"));
-        label_6->setFont(font);
-
-        gridLayout->addWidget(label_6, 0, 0, 1, 1);
-
-        nameEdit = new QLineEdit(Logical_Element_Properties);
-        nameEdit->setObjectName(QString::fromUtf8("nameEdit"));
-        nameEdit->setFont(font);
-
-        gridLayout->addWidget(nameEdit, 0, 1, 1, 2);
+        gridLayout->addWidget(Cancel, 5, 3, 1, 1);
 
 
         retranslateUi(Logical_Element_Properties);
@@ -161,14 +167,15 @@ public:
     void retranslateUi(QWidget *Logical_Element_Properties)
     {
         Logical_Element_Properties->setWindowTitle(QCoreApplication::translate("Logical_Element_Properties", "Form", nullptr));
-        label_3->setText(QCoreApplication::translate("Logical_Element_Properties", "Truth table", nullptr));
         OK->setText(QCoreApplication::translate("Logical_Element_Properties", "OK", nullptr));
         label->setText(QCoreApplication::translate("Logical_Element_Properties", "Number of inputs", nullptr));
         label_2->setText(QCoreApplication::translate("Logical_Element_Properties", "Number of outputs", nullptr));
+        delButton->setText(QCoreApplication::translate("Logical_Element_Properties", "Delete", nullptr));
+        label_3->setText(QCoreApplication::translate("Logical_Element_Properties", "Truth table", nullptr));
+        label_6->setText(QCoreApplication::translate("Logical_Element_Properties", "Name", nullptr));
         label_4->setText(QCoreApplication::translate("Logical_Element_Properties", "Inputs", nullptr));
         label_5->setText(QCoreApplication::translate("Logical_Element_Properties", "Outputs", nullptr));
         Cancel->setText(QCoreApplication::translate("Logical_Element_Properties", "Cancel", nullptr));
-        label_6->setText(QCoreApplication::translate("Logical_Element_Properties", "Name", nullptr));
     } // retranslateUi
 
 };

@@ -1,5 +1,6 @@
 #include "logicalelement.h"
 #include "logictypes.h"
+#include "temp.h"
 using namespace std;
 
 vector<id_t> el_to_connect;
@@ -9,6 +10,8 @@ LogicalElement::LogicalElement(QObject *parent)
     : QObject{parent}, QGraphicsItem()
 {
     QObject::connect(&this->form_LEP, &Logical_Element_Properties::propSignal, this, &LogicalElement::propSlot);
+    QObject::connect(this, &LogicalElement::propSignal, &this->form_LEP, &Logical_Element_Properties::propSlot);
+    QObject::connect(&this->form_LEP, &Logical_Element_Properties::delSignal, this, &LogicalElement::delSlot);
     this->width = 60;
     this->height = 120;
     this->L_inputs.resize(1);
@@ -18,13 +21,9 @@ LogicalElement::LogicalElement(QObject *parent)
     auto input_num = L_inputs.size();
     auto output_num = L_outputs.size();
     auto rows = (rows_t) pow(logic_level, input_num);
-    for (unsigned row = 0; row < rows; row++)
-    {
-        for (unsigned column = 0; column < output_num; column++)
-        {
-            T_outputs[row][column] = row;
-        }
-    }
+    for (rows_t row = 0; row < rows; row++)
+        for (ionum_t column = 0; column < output_num; column++)
+            T_outputs[row][column] = 0;
 
 //    {
 //        auto input_num = L_inputs.size();
@@ -158,6 +157,7 @@ void LogicalElement::mousePressEvent(QGraphicsSceneMouseEvent *event)
     }
     if (event->button() == Qt::RightButton)
     {
+        emit propSignal(this->L_name, this->L_inputs.size(), this->L_outputs.size(), this->T_outputs);
         form_LEP.show();
     }
     if (event->button() == Qt::MidButton)
@@ -167,6 +167,7 @@ void LogicalElement::mousePressEvent(QGraphicsSceneMouseEvent *event)
 void LogicalElement::mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event)
 {
     Q_UNUSED(event);
+    emit propSignal(this->L_name, this->L_inputs.size(), this->L_outputs.size(), this->T_outputs);
     form_LEP.show();
 }
 
@@ -211,13 +212,13 @@ void LogicalElement::propSlot(QString name, ionum_t inum, ionum_t onum, std::vec
     }
 }
 
+void LogicalElement::delSlot() { emit delSignal(this->L_ID); }
+
 vector<value_t> LogicalElement::getOutput(level_t logic_level, vector<value_t> L_inputs)
 {
     rows_t row = 0;
     for (unsigned i = 0, j = L_inputs.size() - 1; i < L_inputs.size(); i++, j--)
-    {
-        row += (rows_t) L_inputs[i] * pow(logic_level, j);
-    }
+        row += L_inputs[i] * (rows_t) pow(logic_level, j);
     //cout << "row: " << row << "\n";
     return this->T_outputs[row];
 }

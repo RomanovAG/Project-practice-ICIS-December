@@ -18,6 +18,7 @@ public:
 
 signals:
     void valueChanged(value_t value, id_t ID, ionum_t io_id, bool is_input);
+    void delSignal();
 
 private slots:
     void on_buttonBox_accepted();
@@ -27,6 +28,8 @@ private slots:
     void on_outputBox_valueChanged(int arg1);
 
     void on_buttonBox_rejected();
+
+    void on_delButton_clicked();
 
 private:
     Ui::Input_Output_Properties *ui;

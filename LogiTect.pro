@@ -9,6 +9,7 @@ CONFIG += c++11
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
+    el_to_save_form.cpp \
     graphicsscene.cpp \
     input_output.cpp \
     input_output_properties.cpp \
@@ -23,7 +24,7 @@ SOURCES += \
     truthtable.cpp
 
 HEADERS += \
-    classes.h \
+    el_to_save_form.h \
     graphicsscene.h \
     input_output.h \
     input_output_properties.h \
@@ -34,9 +35,11 @@ HEADERS += \
     methods.h \
     net.h \
     net_properties.h \
-    set_logic_level.h
+    set_logic_level.h \
+    temp.h
 
 FORMS += \
+    el_to_save_form.ui \
     input_output_properties.ui \
     logical_element_properties.ui \
     mainwindow.ui \
@@ -48,7 +51,7 @@ TRANSLATIONS += \
 CONFIG += lrelease
 CONFIG += embed_translations
 
-#win32:RC_FILE = rcfile.rc
+win32:RC_FILE = rcfile.rc
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

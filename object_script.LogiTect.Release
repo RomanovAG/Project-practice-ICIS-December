@@ -1,3 +1,4 @@
+release/el_to_save_form.o
 release/graphicsscene.o
 release/input_output.o
 release/input_output_properties.o
@@ -12,6 +13,7 @@ release/set_logic_level.o
 release/truthtable.o
 release/qrc_resources.o
 release/qrc_qmake_qmake_qm_files.o
+release/moc_el_to_save_form.o
 release/moc_graphicsscene.o
 release/moc_input_output.o
 release/moc_input_output_properties.o

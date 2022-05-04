@@ -4,6 +4,7 @@
 #include <QtWidgets>
 #include "logical_element_properties.h"
 #include "logictypes.h"
+#include "temp.h"
 
 class LogicalElement : public QObject, public QGraphicsItem
 {
@@ -15,9 +16,10 @@ public:
 signals:
     void connectSignal(std::vector<id_t> ids);
     void coordsSignal(QPointF pos);
+    void propSignal(QString name, ionum_t inum, ionum_t onum, std::vector<std::vector<value_t>> output_table);
+    void delSignal(id_t ID);
 
 private:
-
     QRectF boundingRect() const;
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
     void mouseMoveEvent(QGraphicsSceneMouseEvent *event);
@@ -27,6 +29,7 @@ private:
 
 public slots:
     void propSlot(QString name, ionum_t inum, ionum_t onum, std::vector<std::vector<value_t>> output_table);
+    void delSlot();
 
 public:
     bool is_connector = false;
@@ -37,7 +40,8 @@ public:
     QString L_name;
     delay_t L_delay;
     std::vector<value_t> L_inputs, L_outputs;
-    //std::vector<Temp> temps;
+
+    std::vector<Temp> temps;
 
     std::vector<std::vector<value_t>> T_outputs;
     std::vector<value_t> getOutput(level_t logic_level, std::vector<value_t> L_inputs);

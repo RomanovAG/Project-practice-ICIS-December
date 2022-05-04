@@ -1,6 +1,9 @@
 qwindowsvistastyle.h
 .ninja_deps
 .ninja_log
+.ltp
+.ltplib
+.txt
 
 # Prerequisites
 *.d

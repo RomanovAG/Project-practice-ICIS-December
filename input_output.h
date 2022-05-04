@@ -14,17 +14,19 @@ public:
 
 signals:
     void coordsSignal(QPointF pos);
+    void delSignal(id_t ID);
 
 public slots:
     void propSlot(value_t value, id_t ID, ionum_t io_id, bool is_input);
     void coordsSlot(QPointF pos);
+    void delSlot();
 
 private:
     QRectF boundingRect() const;
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
     void mouseMoveEvent(QGraphicsSceneMouseEvent *event);
     void mousePressEvent(QGraphicsSceneMouseEvent *event);
-    void mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event);
+    //void mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event);
     void mouseReleaseEvent(QGraphicsSceneMouseEvent *event);
 
 public:

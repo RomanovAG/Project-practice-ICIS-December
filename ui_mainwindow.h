@@ -19,6 +19,7 @@
 #include <QtWidgets/QMenu>
 #include <QtWidgets/QMenuBar>
 #include <QtWidgets/QPushButton>
+#include <QtWidgets/QSlider>
 #include <QtWidgets/QSpacerItem>
 #include <QtWidgets/QStatusBar>
 #include <QtWidgets/QTabWidget>
@@ -35,17 +36,18 @@ public:
     QAction *actionSet_logic_level;
     QAction *actionNew_project;
     QAction *actionSave;
+    QAction *actionSave_element;
+    QAction *actionLoad_element;
     QWidget *centralwidget;
     QGridLayout *gridLayout;
-    QGraphicsView *graphicsView;
-    QGridLayout *gridLayout_4;
-    QPushButton *pushButton;
-    QPushButton *connector;
+    QFrame *line_4;
     QFrame *line;
-    QPushButton *pushButton_2;
-    QGridLayout *gridLayout_2;
-    QPushButton *addInOut;
-    QPushButton *addNet;
+    QFrame *line_2;
+    QSlider *tickerSlider;
+    QPushButton *updateButton;
+    QGridLayout *gridLayout_5;
+    QPushButton *plusTickerButton;
+    QPushButton *minusTickerButton;
     QTabWidget *tab;
     QWidget *tab_1;
     QGridLayout *gridLayout_3;
@@ -53,14 +55,23 @@ public:
     QPushButton *andButton;
     QPushButton *orButton;
     QWidget *tab_2;
+    QPushButton *simulateButton;
     QSpacerItem *horizontalSpacer;
-    QFrame *line_2;
+    QGridLayout *gridLayout_2;
+    QPushButton *addInOut;
+    QPushButton *addNet;
+    QGridLayout *gridLayout_4;
+    QPushButton *pushButton;
+    QPushButton *connector;
+    QGraphicsView *graphicsView;
+    QFrame *line_3;
     QMenuBar *menubar;
     QMenu *menuFile;
     QMenu *menuSettings;
     QMenu *menuProject;
     QStatusBar *statusBar;
     QToolBar *toolBar;
+    QToolBar *toolBar_2;
 
     void setupUi(QMainWindow *MainWindow)
     {
@@ -99,6 +110,10 @@ public:
         QIcon icon4;
         icon4.addFile(QString::fromUtf8(":/res/resources/Save_37110.png"), QSize(), QIcon::Normal, QIcon::Off);
         actionSave->setIcon(icon4);
+        actionSave_element = new QAction(MainWindow);
+        actionSave_element->setObjectName(QString::fromUtf8("actionSave_element"));
+        actionLoad_element = new QAction(MainWindow);
+        actionLoad_element->setObjectName(QString::fromUtf8("actionLoad_element"));
         centralwidget = new QWidget(MainWindow);
         centralwidget->setObjectName(QString::fromUtf8("centralwidget"));
         centralwidget->setEnabled(true);
@@ -110,25 +125,12 @@ public:
         centralwidget->setLayoutDirection(Qt::LeftToRight);
         gridLayout = new QGridLayout(centralwidget);
         gridLayout->setObjectName(QString::fromUtf8("gridLayout"));
-        graphicsView = new QGraphicsView(centralwidget);
-        graphicsView->setObjectName(QString::fromUtf8("graphicsView"));
+        line_4 = new QFrame(centralwidget);
+        line_4->setObjectName(QString::fromUtf8("line_4"));
+        line_4->setFrameShape(QFrame::HLine);
+        line_4->setFrameShadow(QFrame::Sunken);
 
-        gridLayout->addWidget(graphicsView, 0, 2, 9, 1);
-
-        gridLayout_4 = new QGridLayout();
-        gridLayout_4->setObjectName(QString::fromUtf8("gridLayout_4"));
-        pushButton = new QPushButton(centralwidget);
-        pushButton->setObjectName(QString::fromUtf8("pushButton"));
-
-        gridLayout_4->addWidget(pushButton, 0, 0, 1, 1);
-
-        connector = new QPushButton(centralwidget);
-        connector->setObjectName(QString::fromUtf8("connector"));
-
-        gridLayout_4->addWidget(connector, 0, 1, 1, 1);
-
-
-        gridLayout->addLayout(gridLayout_4, 0, 1, 1, 1);
+        gridLayout->addWidget(line_4, 13, 1, 1, 1);
 
         line = new QFrame(centralwidget);
         line->setObjectName(QString::fromUtf8("line"));
@@ -137,43 +139,55 @@ public:
 
         gridLayout->addWidget(line, 1, 1, 1, 1);
 
-        pushButton_2 = new QPushButton(centralwidget);
-        pushButton_2->setObjectName(QString::fromUtf8("pushButton_2"));
+        line_2 = new QFrame(centralwidget);
+        line_2->setObjectName(QString::fromUtf8("line_2"));
+        line_2->setFrameShape(QFrame::HLine);
+        line_2->setFrameShadow(QFrame::Sunken);
+
+        gridLayout->addWidget(line_2, 3, 1, 1, 1);
+
+        tickerSlider = new QSlider(centralwidget);
+        tickerSlider->setObjectName(QString::fromUtf8("tickerSlider"));
+        tickerSlider->setOrientation(Qt::Horizontal);
+
+        gridLayout->addWidget(tickerSlider, 11, 1, 1, 1);
+
+        updateButton = new QPushButton(centralwidget);
+        updateButton->setObjectName(QString::fromUtf8("updateButton"));
         QSizePolicy sizePolicy2(QSizePolicy::Minimum, QSizePolicy::Minimum);
         sizePolicy2.setHorizontalStretch(0);
         sizePolicy2.setVerticalStretch(0);
-        sizePolicy2.setHeightForWidth(pushButton_2->sizePolicy().hasHeightForWidth());
-        pushButton_2->setSizePolicy(sizePolicy2);
+        sizePolicy2.setHeightForWidth(updateButton->sizePolicy().hasHeightForWidth());
+        updateButton->setSizePolicy(sizePolicy2);
 
-        gridLayout->addWidget(pushButton_2, 7, 1, 1, 1);
+        gridLayout->addWidget(updateButton, 14, 1, 1, 1);
 
-        gridLayout_2 = new QGridLayout();
-        gridLayout_2->setObjectName(QString::fromUtf8("gridLayout_2"));
-        addInOut = new QPushButton(centralwidget);
-        addInOut->setObjectName(QString::fromUtf8("addInOut"));
+        gridLayout_5 = new QGridLayout();
+        gridLayout_5->setObjectName(QString::fromUtf8("gridLayout_5"));
+        plusTickerButton = new QPushButton(centralwidget);
+        plusTickerButton->setObjectName(QString::fromUtf8("plusTickerButton"));
+        QFont font;
+        font.setPointSize(12);
+        plusTickerButton->setFont(font);
 
-        gridLayout_2->addWidget(addInOut, 0, 1, 1, 1);
+        gridLayout_5->addWidget(plusTickerButton, 0, 2, 1, 1);
 
-        addNet = new QPushButton(centralwidget);
-        addNet->setObjectName(QString::fromUtf8("addNet"));
-        QSizePolicy sizePolicy3(QSizePolicy::Preferred, QSizePolicy::Fixed);
-        sizePolicy3.setHorizontalStretch(0);
-        sizePolicy3.setVerticalStretch(0);
-        sizePolicy3.setHeightForWidth(addNet->sizePolicy().hasHeightForWidth());
-        addNet->setSizePolicy(sizePolicy3);
+        minusTickerButton = new QPushButton(centralwidget);
+        minusTickerButton->setObjectName(QString::fromUtf8("minusTickerButton"));
+        minusTickerButton->setFont(font);
 
-        gridLayout_2->addWidget(addNet, 0, 0, 1, 1);
+        gridLayout_5->addWidget(minusTickerButton, 0, 1, 1, 1);
 
 
-        gridLayout->addLayout(gridLayout_2, 4, 1, 1, 1);
+        gridLayout->addLayout(gridLayout_5, 9, 1, 1, 1);
 
         tab = new QTabWidget(centralwidget);
         tab->setObjectName(QString::fromUtf8("tab"));
-        QSizePolicy sizePolicy4(QSizePolicy::Preferred, QSizePolicy::Preferred);
-        sizePolicy4.setHorizontalStretch(0);
-        sizePolicy4.setVerticalStretch(0);
-        sizePolicy4.setHeightForWidth(tab->sizePolicy().hasHeightForWidth());
-        tab->setSizePolicy(sizePolicy4);
+        QSizePolicy sizePolicy3(QSizePolicy::Preferred, QSizePolicy::Preferred);
+        sizePolicy3.setHorizontalStretch(0);
+        sizePolicy3.setVerticalStretch(0);
+        sizePolicy3.setHeightForWidth(tab->sizePolicy().hasHeightForWidth());
+        tab->setSizePolicy(sizePolicy3);
         tab->setLayoutDirection(Qt::LeftToRight);
         tab_1 = new QWidget();
         tab_1->setObjectName(QString::fromUtf8("tab_1"));
@@ -201,16 +215,61 @@ public:
 
         gridLayout->addWidget(tab, 2, 1, 1, 1);
 
+        simulateButton = new QPushButton(centralwidget);
+        simulateButton->setObjectName(QString::fromUtf8("simulateButton"));
+
+        gridLayout->addWidget(simulateButton, 12, 1, 1, 1);
+
         horizontalSpacer = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
 
-        gridLayout->addItem(horizontalSpacer, 5, 1, 1, 1);
+        gridLayout->addItem(horizontalSpacer, 6, 1, 1, 1);
 
-        line_2 = new QFrame(centralwidget);
-        line_2->setObjectName(QString::fromUtf8("line_2"));
-        line_2->setFrameShape(QFrame::HLine);
-        line_2->setFrameShadow(QFrame::Sunken);
+        gridLayout_2 = new QGridLayout();
+        gridLayout_2->setObjectName(QString::fromUtf8("gridLayout_2"));
+        addInOut = new QPushButton(centralwidget);
+        addInOut->setObjectName(QString::fromUtf8("addInOut"));
 
-        gridLayout->addWidget(line_2, 3, 1, 1, 1);
+        gridLayout_2->addWidget(addInOut, 0, 1, 1, 1);
+
+        addNet = new QPushButton(centralwidget);
+        addNet->setObjectName(QString::fromUtf8("addNet"));
+        QSizePolicy sizePolicy4(QSizePolicy::Preferred, QSizePolicy::Fixed);
+        sizePolicy4.setHorizontalStretch(0);
+        sizePolicy4.setVerticalStretch(0);
+        sizePolicy4.setHeightForWidth(addNet->sizePolicy().hasHeightForWidth());
+        addNet->setSizePolicy(sizePolicy4);
+
+        gridLayout_2->addWidget(addNet, 0, 0, 1, 1);
+
+
+        gridLayout->addLayout(gridLayout_2, 5, 1, 1, 1);
+
+        gridLayout_4 = new QGridLayout();
+        gridLayout_4->setObjectName(QString::fromUtf8("gridLayout_4"));
+        pushButton = new QPushButton(centralwidget);
+        pushButton->setObjectName(QString::fromUtf8("pushButton"));
+
+        gridLayout_4->addWidget(pushButton, 0, 0, 1, 1);
+
+        connector = new QPushButton(centralwidget);
+        connector->setObjectName(QString::fromUtf8("connector"));
+
+        gridLayout_4->addWidget(connector, 0, 1, 1, 1);
+
+
+        gridLayout->addLayout(gridLayout_4, 0, 1, 1, 1);
+
+        graphicsView = new QGraphicsView(centralwidget);
+        graphicsView->setObjectName(QString::fromUtf8("graphicsView"));
+
+        gridLayout->addWidget(graphicsView, 0, 4, 16, 1);
+
+        line_3 = new QFrame(centralwidget);
+        line_3->setObjectName(QString::fromUtf8("line_3"));
+        line_3->setFrameShape(QFrame::HLine);
+        line_3->setFrameShadow(QFrame::Sunken);
+
+        gridLayout->addWidget(line_3, 8, 1, 1, 1);
 
         MainWindow->setCentralWidget(centralwidget);
         menubar = new QMenuBar(MainWindow);
@@ -233,6 +292,9 @@ public:
         toolBar->setToolButtonStyle(Qt::ToolButtonIconOnly);
         toolBar->setFloatable(true);
         MainWindow->addToolBar(Qt::TopToolBarArea, toolBar);
+        toolBar_2 = new QToolBar(MainWindow);
+        toolBar_2->setObjectName(QString::fromUtf8("toolBar_2"));
+        MainWindow->addToolBar(Qt::TopToolBarArea, toolBar_2);
 
         menubar->addAction(menuFile->menuAction());
         menubar->addAction(menuSettings->menuAction());
@@ -242,11 +304,17 @@ public:
         menuFile->addAction(actionSave);
         menuFile->addAction(actionSave_As);
         menuProject->addAction(actionSet_logic_level);
+        menuProject->addSeparator();
+        menuProject->addAction(actionLoad_element);
+        menuProject->addAction(actionSave_element);
         toolBar->addAction(actionNew_project);
         toolBar->addAction(actionOpen);
         toolBar->addAction(actionSave);
         toolBar->addAction(actionSave_As);
-        toolBar->addAction(actionSet_logic_level);
+        toolBar_2->addAction(actionSet_logic_level);
+        toolBar_2->addSeparator();
+        toolBar_2->addAction(actionLoad_element);
+        toolBar_2->addAction(actionSave_element);
 
         retranslateUi(MainWindow);
 
@@ -273,20 +341,26 @@ public:
 #if QT_CONFIG(shortcut)
         actionSave->setShortcut(QCoreApplication::translate("MainWindow", "Ctrl+S", nullptr));
 #endif // QT_CONFIG(shortcut)
-        pushButton->setText(QCoreApplication::translate("MainWindow", "Add logical element", nullptr));
-        connector->setText(QCoreApplication::translate("MainWindow", "Add connector", nullptr));
-        pushButton_2->setText(QCoreApplication::translate("MainWindow", "Update", nullptr));
-        addInOut->setText(QCoreApplication::translate("MainWindow", "Add input/output", nullptr));
-        addNet->setText(QCoreApplication::translate("MainWindow", "Add net", nullptr));
+        actionSave_element->setText(QCoreApplication::translate("MainWindow", "Save element", nullptr));
+        actionLoad_element->setText(QCoreApplication::translate("MainWindow", "Load element", nullptr));
+        updateButton->setText(QCoreApplication::translate("MainWindow", "Update", nullptr));
+        plusTickerButton->setText(QCoreApplication::translate("MainWindow", "+", nullptr));
+        minusTickerButton->setText(QCoreApplication::translate("MainWindow", "-", nullptr));
         notButton->setText(QCoreApplication::translate("MainWindow", "NOT", nullptr));
         andButton->setText(QCoreApplication::translate("MainWindow", "AND", nullptr));
         orButton->setText(QCoreApplication::translate("MainWindow", "OR", nullptr));
         tab->setTabText(tab->indexOf(tab_1), QCoreApplication::translate("MainWindow", "Binary logic", nullptr));
         tab->setTabText(tab->indexOf(tab_2), QCoreApplication::translate("MainWindow", "Ternary logic", nullptr));
+        simulateButton->setText(QCoreApplication::translate("MainWindow", "Simulate", nullptr));
+        addInOut->setText(QCoreApplication::translate("MainWindow", "Add input/output", nullptr));
+        addNet->setText(QCoreApplication::translate("MainWindow", "Add net", nullptr));
+        pushButton->setText(QCoreApplication::translate("MainWindow", "Add logical element", nullptr));
+        connector->setText(QCoreApplication::translate("MainWindow", "Add connector", nullptr));
         menuFile->setTitle(QCoreApplication::translate("MainWindow", "File", nullptr));
         menuSettings->setTitle(QCoreApplication::translate("MainWindow", "Settings", nullptr));
         menuProject->setTitle(QCoreApplication::translate("MainWindow", "Project", nullptr));
         toolBar->setWindowTitle(QCoreApplication::translate("MainWindow", "toolBar", nullptr));
+        toolBar_2->setWindowTitle(QCoreApplication::translate("MainWindow", "toolBar_2", nullptr));
     } // retranslateUi
 
 };
