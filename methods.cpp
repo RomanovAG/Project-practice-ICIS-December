@@ -14,6 +14,7 @@ extern level_t logic_level;
 extern vector<LogicalElement *> all_elements;
 extern vector<Input_Output *> all_inOutputs;
 extern vector<Net *> all_nets;
+bool simulated;
 
 int randomBetween(int low, int high) { return (QRandomGenerator::global()->generate() % ((high + 1) - low) + low); }
 
@@ -223,6 +224,7 @@ int loadFile(QString file_name, QGraphicsScene *scene, MainWindow *window)
         window->ui->addInOut->setEnabled(true);
         window->ui->addNet->setEnabled(true);
         window->logic_status->setText("Logic level: " + QString::number(logic_level));
+        window->enableUpdate(true);
     }
     size_t size_of_all_elements = 0;
     size_t size_of_all_inOutputs = 0;
@@ -330,7 +332,7 @@ int loadFile(QString file_name, QGraphicsScene *scene, MainWindow *window)
         net->update();
         all_nets[i] = net;
     }
-    updateScheme(MAX_ITERATIONS);
+    //updateScheme(MAX_ITERATIONS);
     return 0;
 }
 
@@ -452,8 +454,10 @@ int updateScheme(unsigned max_iterations/*vector<id_t> inOutput_ids_to_ignore*/)
             {
                 long x = 0;
                 x = returnLID(all_elements, all_inOutputs[i]->addr.first);
+                /*
                 //while (all_elements[x]->L_ID != all_inOutputs[i]->addr.first)
                     //x++;
+*/
                 if (all_elements[x]->L_inputs[all_inOutputs[i]->addr.second] != all_inOutputs[i]->value)
                 {
                     changed = true;
@@ -464,8 +468,10 @@ int updateScheme(unsigned max_iterations/*vector<id_t> inOutput_ids_to_ignore*/)
             {
                 long x = 0;
                 x = returnLID(all_elements, all_inOutputs[i]->addr.first);
+                /*
                 //while (all_elements[x]->L_ID != all_inOutputs[i]->addr.first)
                     //x++;
+*/
                 if (all_inOutputs[i]->value != all_elements[x]->L_outputs[all_inOutputs[i]->addr.second])
                 {
                     changed = true;
@@ -474,34 +480,36 @@ int updateScheme(unsigned max_iterations/*vector<id_t> inOutput_ids_to_ignore*/)
             }
             all_inOutputs[i]->update();
         }
-
         for (size_t i = 0; i < all_elements.size(); i++)
         {
             if (all_elements[i]->L_outputs != all_elements[i]->getOutput(logic_level, all_elements[i]->L_inputs))
             {
                 changed = true;
-                all_elements[i]->L_outputs = all_elements[i]->getOutput(logic_level, all_elements[i]->L_inputs);
+                all_elements[i]->setOutput(logic_level);
             }
         }
         for (size_t i = 0; i < all_nets.size(); i++)
         {
+            /*
 //            if (all_nets[i]->value != all_elements[all_nets[i]->start_addr.first]->L_outputs[all_nets[i]->start_addr.second])
 //            {
 //                changed = true;
 //                all_nets[i]->value = all_elements[all_nets[i]->start_addr.first]->L_outputs[all_nets[i]->start_addr.second];
 //                all_elements[all_nets[i]->end_addr.first]->L_inputs[all_nets[i]->end_addr.second] = all_nets[i]->value;
 //            }
-            long x = 0;
-            x = returnLID(all_elements, all_nets[i]->start_addr.first);
+*/
+            long x = returnLID(all_elements, all_nets[i]->start_addr.first);
+            /*
 //            size_t x = 0;
 //            while (all_elements[x]->L_ID != all_nets[i]->start_addr.first)
 //                x++;
             //qDebug() << "x:" << x;
+*/
             if (all_elements[x]->L_outputs != all_elements[x]->getOutput(logic_level, all_elements[x]->L_inputs))
             {
                 changed = true;
                 //qDebug() << "changed:" << changed;
-                all_elements[x]->L_outputs = all_elements[x]->getOutput(logic_level, all_elements[x]->L_inputs);
+                all_elements[x]->setOutput(logic_level);
             }
             if (all_nets[i]->value != all_elements[x]->L_outputs[all_nets[i]->start_addr.second])
             {
@@ -509,8 +517,8 @@ int updateScheme(unsigned max_iterations/*vector<id_t> inOutput_ids_to_ignore*/)
                 all_nets[i]->value = all_elements[x]->L_outputs[all_nets[i]->start_addr.second];
             }
 
-            long y = 0;
-            y = returnLID(all_elements, all_nets[i]->end_addr.first);
+            long y = returnLID(all_elements, all_nets[i]->end_addr.first);
+            /*
 //            size_t y = 0;
 //            while (all_elements[y]->L_ID != all_nets[i]->end_addr.first)
 //                y++;
@@ -523,6 +531,7 @@ int updateScheme(unsigned max_iterations/*vector<id_t> inOutput_ids_to_ignore*/)
 //                        ignore = true;
 //                        break;
 //                    }
+*/
             if (all_elements[y]->L_inputs[all_nets[i]->end_addr.second] != all_nets[i]->value)
             {
                 changed = true;
@@ -531,21 +540,20 @@ int updateScheme(unsigned max_iterations/*vector<id_t> inOutput_ids_to_ignore*/)
             if (all_elements[y]->L_outputs != all_elements[y]->getOutput(logic_level, all_elements[y]->L_inputs))
             {
                 changed = true;
-                all_elements[y]->L_outputs = all_elements[y]->getOutput(logic_level, all_elements[y]->L_inputs);
+                all_elements[y]->setOutput(logic_level);
             }
+            all_nets[i]->update();
         }
         if (changed == false)
             break;
     }
     qDebug() << "iterations:" << iterations + 1;
-    for (size_t i = 0; i < all_nets.size(); i++)
-        all_nets[i]->update();
     if (iterations == max_iterations)
         return -1;
     return iterations;
 }
 
-int simulateScheme()
+int simulateScheme(MainWindow *window)
 {
     ticker = 0;
     ticker_t global_delay = 0;
@@ -553,30 +561,143 @@ int simulateScheme()
         global_delay += all_elements[i]->L_delay;
     for (size_t i = 0; i < all_nets.size(); i++)
         global_delay += all_nets[i]->net_delay;
+    global_delay++;
+    global_delay *= 2;
+    qDebug() << "global delay: " << global_delay;
+    window->ui->tickerSlider->setMaximum(global_delay);
+    for (size_t i = 0; i < all_elements.size(); i++)
+    {
+        for (size_t t = 0; t < all_elements[i]->temps.size(); t++)
+            all_elements[i]->temps.resize(0, Temp(vector<value_t> {0}, 0));
+        all_elements[i]->temps.push_back(Temp(all_elements[i]->L_outputs, 0));
+        //qDebug() << "Element ID " << all_elements[i]->L_ID << " temps size after sim" << all_elements[i]->temps.size();
+    }
+    for (size_t i = 0; i < all_nets.size(); i++)
+    {
+        for (size_t t = 0; t < all_nets[i]->temps.size(); t++)
+            all_nets[i]->temps.resize(0, Temp(vector<value_t> {0}, 0));
+        all_nets[i]->temps.push_back(Temp(vector<value_t> {all_nets[i]->value}, 0));
+    }
+
     for (; ticker <= global_delay; ticker++)
     {
         for (size_t i = 0; i < all_inOutputs.size(); i++)
         {
             if (all_inOutputs[i]->is_input == true)
             {
-                if (all_elements[all_inOutputs[i]->addr.first]->L_inputs[all_inOutputs[i]->addr.second] != all_inOutputs[i]->value)
-                    all_elements[all_inOutputs[i]->addr.first]->L_inputs[all_inOutputs[i]->addr.second] = all_inOutputs[i]->value;
+                long x = 0;
+                x = returnLID(all_elements, all_inOutputs[i]->addr.first);
+                if (all_elements[x]->L_inputs[all_inOutputs[i]->addr.second] != all_inOutputs[i]->value)
+                    all_elements[x]->L_inputs[all_inOutputs[i]->addr.second] = all_inOutputs[i]->value;
             }
         }
         for (size_t i = 0; i < all_elements.size(); i++)
         {
-            if (all_elements[i]->L_outputs != all_elements[i]->getOutput(logic_level, all_elements[i]->L_inputs) &&
-                all_elements[i]->getOutput(logic_level, all_elements[i]->L_inputs) != all_elements[i]->temps.back().values)
-            {
+            //if (all_elements[i]->L_outputs != all_elements[i]->getOutput(logic_level, all_elements[i]->L_inputs) &&
+            //    all_elements[i]->temps.size() > 0 /*&&
+            //    all_elements[i]->getOutput(logic_level, all_elements[i]->L_inputs) != all_elements[i]->temps.back().values*/)
+            //{
                 all_elements[i]->temps.push_back
                     (Temp(all_elements[i]->getOutput(logic_level, all_elements[i]->L_inputs), ticker + all_elements[i]->L_delay));
-            }
+            //}
+            //else if (all_elements[i]->L_outputs != all_elements[i]->getOutput(logic_level, all_elements[i]->L_inputs) &&
+            //         all_elements[i]->temps.size() == 0)
+            //    all_elements[i]->temps.push_back
+            //        (Temp(all_elements[i]->getOutput(logic_level, all_elements[i]->L_inputs), ticker + all_elements[i]->L_delay));
             for (size_t t = 0; t < all_elements[i]->temps.size(); t++)
             {
                 if (all_elements[i]->temps[t].timestamp == ticker)
                     all_elements[i]->L_outputs = all_elements[i]->temps[t].values;
             }
         }
+        for (size_t i = 0; i < all_nets.size(); i++)
+        {
+            long x = returnLID(all_elements, all_nets[i]->start_addr.first);
+            //if (all_nets[i]->value != all_elements[x]->L_outputs[all_nets[i]->start_addr.second] &&
+            //    all_nets[i]->temps.size() > 0 /*&&
+            //    all_elements[x]->L_outputs[all_nets[i]->start_addr.second] != all_nets[i]->temps.back().values[0]*/)
+            //{
+                all_nets[i]->temps.push_back
+                    (Temp(vector<value_t> {all_elements[x]->L_outputs[all_nets[i]->start_addr.second]},
+                          ticker + all_nets[i]->net_delay));
+            //}
+            //else if (all_nets[i]->value != all_elements[x]->L_outputs[all_nets[i]->start_addr.second] && all_nets[i]->temps.size() == 0)
+            //    all_nets[i]->temps.push_back
+            //        (Temp(vector<value_t> {all_elements[x]->L_outputs[all_nets[i]->start_addr.second]},
+            //              ticker + all_nets[i]->net_delay));
+            for (size_t t = 0; t < all_nets[i]->temps.size(); t++)
+            {
+                if (all_nets[i]->temps[t].timestamp == ticker)
+                    all_nets[i]->value = all_nets[i]->temps[t].values[0];
+                long y = returnLID(all_elements, all_nets[i]->end_addr.first);
+                all_elements[y]->L_inputs[all_nets[i]->end_addr.second] = all_nets[i]->value;
+            }
+        }
+    }
+    ticker = 0;
+    return 0;
+}
+
+int useSimulation(ticker_t time)
+{
+    for (size_t i = 0; i < all_elements.size(); i++)
+    {
+        //qDebug() << "Element ID " << all_elements[i]->L_ID << " temps size" << all_elements[i]->temps.size();
+        if (all_elements[i]->temps.size() == 0)
+            continue;
+        if (all_elements[i]->temps.size() == 1)
+        {
+            all_elements[i]->L_outputs = all_elements[i]->temps[0].values;
+            continue;
+        }
+        for (size_t t = 0; t < all_elements[i]->temps.size(); t++)
+        {
+            if (time == all_elements[i]->temps[t].timestamp /*&& time < all_elements[i]->temps[t + 1].timestamp*/)
+                all_elements[i]->L_outputs = all_elements[i]->temps[t].values;
+            //else
+                //all_elements[i]->L_outputs = all_elements[i]->temps[t + 1].values;
+        }
+    }
+    for (size_t i = 0; i < all_nets.size(); i++)
+    {
+        //qDebug() << "net temps size" << all_nets[i]->temps.size();
+        if (all_nets[i]->temps.size() == 0)
+            continue;
+        if (all_nets[i]->temps.size() == 1)
+        {
+            all_nets[i]->value = all_nets[i]->temps[0].values[0];
+            continue;
+        }
+        for (size_t t = 0; t < all_nets[i]->temps.size(); t++)
+        {
+            if (time == all_nets[i]->temps[t].timestamp /*&& time < all_nets[i]->temps[t + 1].timestamp*/)
+                all_nets[i]->value = all_nets[i]->temps[t].values[0];
+            //else
+                //all_nets[i]->value = all_nets[i]->temps[t + 1].values[0];
+        }
+        all_nets[i]->update();
+    }
+    for (size_t i = 0; i < all_inOutputs.size(); i++)
+    {
+        if (all_inOutputs[i]->is_input == false)
+        {
+            long x = returnLID(all_elements, all_inOutputs[i]->addr.first);
+            /*
+                //while (all_elements[x]->L_ID != all_inOutputs[i]->addr.first)
+                    //x++;
+*/
+            if (all_inOutputs[i]->value != all_elements[x]->L_outputs[all_inOutputs[i]->addr.second])
+            {
+                all_inOutputs[i]->value = all_elements[x]->L_outputs[all_inOutputs[i]->addr.second];
+            }
+        }
+        else
+        {
+            long x = 0;
+            x = returnLID(all_elements, all_inOutputs[i]->addr.first);
+            all_inOutputs[i]->value = all_elements[x]->L_inputs[all_inOutputs[i]->addr.second];
+        }
+        all_inOutputs[i]->update();
     }
     return 0;
 }

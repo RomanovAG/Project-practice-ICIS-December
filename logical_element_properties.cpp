@@ -20,11 +20,12 @@ Logical_Element_Properties::Logical_Element_Properties(QWidget *parent) :
 
 Logical_Element_Properties::~Logical_Element_Properties() { delete this->ui; }
 
-void Logical_Element_Properties::propSlot(QString name, ionum_t inum, ionum_t onum, std::vector<std::vector<value_t> > output_table)
+void Logical_Element_Properties::propSlot(QString name, ionum_t inum, ionum_t onum, std::vector<std::vector<value_t> > output_table, delay_t delay)
 {
     this->ui->nameEdit->setText(name);
     this->ui->inputNumBox->setValue(inum);
     this->ui->outputNumBox->setValue(onum);
+    this->ui->delayBox->setValue(delay);
     auto rows = (rows_t) pow(logic_level, inum);
     this->ui->outputsTextEdit->clear();
     for (unsigned row = 0; row < rows; row++)
@@ -67,7 +68,11 @@ void Logical_Element_Properties::on_OK_clicked()
             i++;
         }
     }
-    emit propSignal(this->ui->nameEdit->text(), this->ui->inputNumBox->value(), this->ui->outputNumBox->value(), output_table);
+    emit this->propSignal(this->ui->nameEdit->text(),
+                          this->ui->inputNumBox->value(),
+                          this->ui->outputNumBox->value(),
+                          output_table,
+                          this->ui->delayBox->value());
     this->close();
 }
 
@@ -134,4 +139,4 @@ void Logical_Element_Properties::on_outputNumBox_valueChanged(int arg1)
     }
 }
 
-void Logical_Element_Properties::on_delButton_clicked() { emit delSignal(); this->close(); }
+void Logical_Element_Properties::on_delButton_clicked() { emit this->delSignal(); this->close(); }

@@ -126,4 +126,4 @@ void Input_Output::coordsSlot(QPointF pos)
     }
 }
 
-void Input_Output::delSlot() { emit delSignal(this->IO_ID); }
+void Input_Output::delSlot() { emit this->delSignal(this->IO_ID); }

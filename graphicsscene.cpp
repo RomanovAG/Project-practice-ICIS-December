@@ -42,7 +42,7 @@ void GraphicsScene::currentItem(LogicalElement *ptr)
 
 void GraphicsScene::keyPressEvent(QKeyEvent *event)
 {
-
+    Q_UNUSED(event);
 }
 
 //void GraphicsScene::mousePressEvent(QGraphicsSceneMouseEvent *event)

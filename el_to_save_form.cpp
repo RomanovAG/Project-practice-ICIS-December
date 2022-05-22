@@ -28,7 +28,7 @@ el_to_save_form::~el_to_save_form() { delete ui; }
 
 void el_to_save_form::on_buttonBox_accepted()
 {
-    emit box_value(this->ui->spinBox->value());
+    emit this->box_value(this->ui->spinBox->value());
     this->close();
 }
 

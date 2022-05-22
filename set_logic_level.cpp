@@ -19,12 +19,8 @@ Set_logic_level::~Set_logic_level() { delete this->ui; }
 void Set_logic_level::on_pushButton_clicked()
 {
     level_t new_logic_level = this->ui->spinBox->value();
-    emit logicLevelChanged(new_logic_level);
+    emit this->logicLevelChanged(new_logic_level);
     this->close();
 }
 
-void Set_logic_level::on_cancel_clicked()
-{
-    this->close();
-}
-
+void Set_logic_level::on_cancel_clicked() { this->close(); }

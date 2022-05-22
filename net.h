@@ -4,6 +4,7 @@
 #include <QtWidgets>
 #include "logictypes.h"
 #include "net_properties.h"
+#include "temp.h"
 
 class Net : public QObject, public QGraphicsItem
 {
@@ -34,6 +35,8 @@ public:
     std::pair<id_t, ionum_t> start_addr, end_addr;
     delay_t net_delay;
     value_t value;
+
+    std::vector<Temp> temps;
 };
 
 #endif // NET_H

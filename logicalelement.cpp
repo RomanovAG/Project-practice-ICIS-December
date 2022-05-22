@@ -24,6 +24,7 @@ LogicalElement::LogicalElement(QObject *parent)
     for (rows_t row = 0; row < rows; row++)
         for (ionum_t column = 0; column < output_num; column++)
             T_outputs[row][column] = 0;
+    this->L_delay = 0;
 
 //    {
 //        auto input_num = L_inputs.size();
@@ -122,8 +123,8 @@ void LogicalElement::paint(QPainter *painter, const QStyleOptionGraphicsItem *op
 
 void LogicalElement::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
 {
-    this->setPos(mapToScene(event->pos()));
-    emit coordsSignal(this->pos());
+    this->setPos(QPointF(round(mapToScene(event->pos()).x() / 10) * 10, round(mapToScene(event->pos()).y() / 10) * 10));
+    emit this->coordsSignal(this->pos());
 }
 
 void LogicalElement::mousePressEvent(QGraphicsSceneMouseEvent *event)
@@ -137,7 +138,7 @@ void LogicalElement::mousePressEvent(QGraphicsSceneMouseEvent *event)
             el_to_connect.push_back(this->L_ID);
             if (el_to_connect.size() == 2)
             {
-                emit connectSignal(el_to_connect);
+                emit this->connectSignal(el_to_connect);
                 el_to_connect.pop_back();
                 el_to_connect.pop_back();
             }
@@ -157,8 +158,8 @@ void LogicalElement::mousePressEvent(QGraphicsSceneMouseEvent *event)
     }
     if (event->button() == Qt::RightButton)
     {
-        emit propSignal(this->L_name, this->L_inputs.size(), this->L_outputs.size(), this->T_outputs);
-        form_LEP.show();
+        emit this->propSignal(this->L_name, this->L_inputs.size(), this->L_outputs.size(), this->T_outputs, this->L_delay);
+        this->form_LEP.show();
     }
     if (event->button() == Qt::MidButton)
         qDebug() << "mid";
@@ -167,8 +168,8 @@ void LogicalElement::mousePressEvent(QGraphicsSceneMouseEvent *event)
 void LogicalElement::mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event)
 {
     Q_UNUSED(event);
-    emit propSignal(this->L_name, this->L_inputs.size(), this->L_outputs.size(), this->T_outputs);
-    form_LEP.show();
+    emit this->propSignal(this->L_name, this->L_inputs.size(), this->L_outputs.size(), this->T_outputs, this->L_delay);
+    this->form_LEP.show();
 }
 
 void LogicalElement::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
@@ -185,7 +186,7 @@ void LogicalElement::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
     this->setCursor(QCursor(Qt::ArrowCursor));
 }
 
-void LogicalElement::propSlot(QString name, ionum_t inum, ionum_t onum, std::vector<std::vector<value_t> > output_table)
+void LogicalElement::propSlot(QString name, ionum_t inum, ionum_t onum, std::vector<std::vector<value_t> > output_table, delay_t delay)
 {
     this->L_name = name;
     this->L_inputs.resize(inum);
@@ -210,15 +211,25 @@ void LogicalElement::propSlot(QString name, ionum_t inum, ionum_t onum, std::vec
         this->L_outputs.resize(onum);
         this->T_outputs = output_table;
     }
+    this->L_delay = delay;
 }
 
-void LogicalElement::delSlot() { emit delSignal(this->L_ID); }
+void LogicalElement::delSlot() { emit this->delSignal(this->L_ID); }
 
 vector<value_t> LogicalElement::getOutput(level_t logic_level, vector<value_t> L_inputs)
 {
     rows_t row = 0;
-    for (unsigned i = 0, j = L_inputs.size() - 1; i < L_inputs.size(); i++, j--)
+    for (size_t i = 0, j = L_inputs.size() - 1; i < L_inputs.size(); i++, j--)
         row += L_inputs[i] * (rows_t) pow(logic_level, j);
     //cout << "row: " << row << "\n";
     return this->T_outputs[row];
+}
+
+vector<value_t> LogicalElement::setOutput(level_t logic_level)
+{
+    rows_t row = 0;
+    for (size_t i = 0, j = this->L_inputs.size() - 1; i < this->L_inputs.size(); i++, j--)
+        row += this->L_inputs[i] * (rows_t) pow(logic_level, j);
+    this->L_outputs = this->T_outputs[row];
+    return this->L_outputs;
 }

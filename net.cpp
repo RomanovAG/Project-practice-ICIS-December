@@ -11,8 +11,8 @@ Net::Net(QObject *parent)
 {
     QObject::connect(&this->form_NP, &Net_Properties::propSignal, this, &Net::propSlot);
     QObject::connect(this, &Net::connectSignal, &this->form_NP, &Net_Properties::addrChangedSlot);
-    start_pos = QPoint(10, 10);
-    end_pos = QPoint(100, 200);
+    this->start_pos = QPoint(10, 10);
+    this->end_pos = QPoint(100, 200);
     this->value = 0;
     this->thickness = 2;
 }
@@ -21,7 +21,7 @@ Net::~Net() {}
 
 void Net::showForm()
 {
-    emit connectSignal(this->start_addr.first, this->end_addr.first);
+    emit this->connectSignal(this->start_addr.first, this->end_addr.first);
     this->form_NP.show();
 }
 
@@ -70,7 +70,7 @@ void Net::propSlot(std::pair<id_t, ionum_t> start_addr, std::pair<id_t, ionum_t>
     this->end_pos = QPointF(all_elements[id_end]->pos()) + QPointF(-all_elements[id_end]->width,
                                                                    -all_elements[id_end]->height / 2
                                                                        + (all_elements[id_end]->height / (all_elements[id_end]->L_inputs.size() + 1)) * (end_addr.second + 1));;
-    update();
+    this->update();
     QObject::connect(all_elements[id_start], &LogicalElement::coordsSignal, this, &Net::coordsStartSlot);
     QObject::connect(all_elements[id_end], &LogicalElement::coordsSignal, this, &Net::coordsEndSlot);
 }
@@ -82,7 +82,7 @@ void Net::coordsStartSlot(QPointF pos)
                                     -all_elements[id]->height / 2
                                         + (all_elements[id]->height / (all_elements[id]->L_outputs.size() + 1)) * (start_addr.second + 1));
     //qDebug() << (all_elements[id]->height / (all_elements[id]->L_outputs.size() + 1));
-    update();
+    this->update();
 }
 
 void Net::coordsEndSlot(QPointF pos)
@@ -91,5 +91,5 @@ void Net::coordsEndSlot(QPointF pos)
     this->end_pos = pos + QPointF(-all_elements[id]->width,
                                   -all_elements[id]->height / 2
                                       + (all_elements[id]->height / (all_elements[id]->L_inputs.size() + 1)) * (end_addr.second + 1));
-    update();
+    this->update();
 }

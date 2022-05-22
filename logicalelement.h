@@ -16,7 +16,7 @@ public:
 signals:
     void connectSignal(std::vector<id_t> ids);
     void coordsSignal(QPointF pos);
-    void propSignal(QString name, ionum_t inum, ionum_t onum, std::vector<std::vector<value_t>> output_table);
+    void propSignal(QString name, ionum_t inum, ionum_t onum, std::vector<std::vector<value_t>> output_table, delay_t delay);
     void delSignal(id_t ID);
 
 private:
@@ -28,7 +28,7 @@ private:
     void mouseReleaseEvent(QGraphicsSceneMouseEvent *event);
 
 public slots:
-    void propSlot(QString name, ionum_t inum, ionum_t onum, std::vector<std::vector<value_t>> output_table);
+    void propSlot(QString name, ionum_t inum, ionum_t onum, std::vector<std::vector<value_t>> output_table, delay_t delay);
     void delSlot();
 
 public:
@@ -40,11 +40,13 @@ public:
     QString L_name;
     delay_t L_delay;
     std::vector<value_t> L_inputs, L_outputs;
+    std::vector<std::pair<ionum_t, ionum_t>> output_to_input;
 
     std::vector<Temp> temps;
 
     std::vector<std::vector<value_t>> T_outputs;
     std::vector<value_t> getOutput(level_t logic_level, std::vector<value_t> L_inputs);
+    std::vector<value_t> setOutput(level_t logic_level);
 };
 
 #endif // LOGICALELEMENT_H

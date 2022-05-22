@@ -17,11 +17,11 @@ public:
     ~Logical_Element_Properties();
 
 signals:
-    void propSignal(QString name, ionum_t inum, ionum_t onum, std::vector<std::vector<value_t>> output_table);
+    void propSignal(QString name, ionum_t inum, ionum_t onum, std::vector<std::vector<value_t>> output_table, delay_t delay);
     void delSignal();
 
 public slots:
-    void propSlot(QString name, ionum_t inum, ionum_t onum, std::vector<std::vector<value_t>> output_table);
+    void propSlot(QString name, ionum_t inum, ionum_t onum, std::vector<std::vector<value_t>> output_table, delay_t delay);
 
 private slots:
 

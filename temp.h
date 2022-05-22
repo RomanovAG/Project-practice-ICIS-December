@@ -13,6 +13,12 @@ public:
         this->values = values;
         this->timestamp = timestamp;
     }
+    ~Temp();
 };
+
+inline Temp::~Temp()
+{
+
+}
 
 #endif // TEMP_H

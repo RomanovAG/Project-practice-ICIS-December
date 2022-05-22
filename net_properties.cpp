@@ -19,17 +19,13 @@ void Net_Properties::addrChangedSlot(id_t start, id_t end)
 void Net_Properties::on_OK_clicked()
 {
     std::pair<id_t, ionum_t> start_addr, end_addr;
-    start_addr.first = ui->startidtBox->value();
-    start_addr.second = ui->onumBox->value();
-    end_addr.first = ui->endidBox->value();
-    end_addr.second = ui->inumBox->value();
-    delay_t delay = ui->delayBox->value();
-    emit propSignal(start_addr, end_addr, delay);
+    start_addr.first = this->ui->startidtBox->value();
+    start_addr.second = this->ui->onumBox->value();
+    end_addr.first = this->ui->endidBox->value();
+    end_addr.second = this->ui->inumBox->value();
+    delay_t delay = this->ui->delayBox->value();
+    emit this->propSignal(start_addr, end_addr, delay);
     this->close();
 }
 
-void Net_Properties::on_Cancel_clicked()
-{
-    this->close();
-}
-
+void Net_Properties::on_Cancel_clicked() { this->close(); }

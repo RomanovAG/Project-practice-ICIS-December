@@ -22,8 +22,8 @@ QT_BEGIN_MOC_NAMESPACE
 QT_WARNING_PUSH
 QT_WARNING_DISABLE_DEPRECATED
 struct qt_meta_stringdata_LogicalElement_t {
-    QByteArrayData data[19];
-    char stringdata0[186];
+    QByteArrayData data[21];
+    char stringdata0[200];
 };
 #define QT_MOC_LITERAL(idx, ofs, len) \
     Q_STATIC_BYTE_ARRAY_DATA_HEADER_INITIALIZER_WITH_OFFSET(len, \
@@ -46,19 +46,21 @@ QT_MOC_LITERAL(10, 93, 4), // "inum"
 QT_MOC_LITERAL(11, 98, 4), // "onum"
 QT_MOC_LITERAL(12, 103, 34), // "std::vector<std::vector<value..."
 QT_MOC_LITERAL(13, 138, 12), // "output_table"
-QT_MOC_LITERAL(14, 151, 9), // "delSignal"
-QT_MOC_LITERAL(15, 161, 4), // "id_t"
-QT_MOC_LITERAL(16, 166, 2), // "ID"
-QT_MOC_LITERAL(17, 169, 8), // "propSlot"
-QT_MOC_LITERAL(18, 178, 7) // "delSlot"
+QT_MOC_LITERAL(14, 151, 7), // "delay_t"
+QT_MOC_LITERAL(15, 159, 5), // "delay"
+QT_MOC_LITERAL(16, 165, 9), // "delSignal"
+QT_MOC_LITERAL(17, 175, 4), // "id_t"
+QT_MOC_LITERAL(18, 180, 2), // "ID"
+QT_MOC_LITERAL(19, 183, 8), // "propSlot"
+QT_MOC_LITERAL(20, 192, 7) // "delSlot"
 
     },
     "LogicalElement\0connectSignal\0\0"
     "std::vector<id_t>\0ids\0coordsSignal\0"
     "pos\0propSignal\0name\0ionum_t\0inum\0onum\0"
     "std::vector<std::vector<value_t> >\0"
-    "output_table\0delSignal\0id_t\0ID\0propSlot\0"
-    "delSlot"
+    "output_table\0delay_t\0delay\0delSignal\0"
+    "id_t\0ID\0propSlot\0delSlot"
 };
 #undef QT_MOC_LITERAL
 
@@ -78,21 +80,21 @@ static const uint qt_meta_data_LogicalElement[] = {
  // signals: name, argc, parameters, tag, flags
        1,    1,   44,    2, 0x06 /* Public */,
        5,    1,   47,    2, 0x06 /* Public */,
-       7,    4,   50,    2, 0x06 /* Public */,
-      14,    1,   59,    2, 0x06 /* Public */,
+       7,    5,   50,    2, 0x06 /* Public */,
+      16,    1,   61,    2, 0x06 /* Public */,
 
  // slots: name, argc, parameters, tag, flags
-      17,    4,   62,    2, 0x0a /* Public */,
-      18,    0,   71,    2, 0x0a /* Public */,
+      19,    5,   64,    2, 0x0a /* Public */,
+      20,    0,   75,    2, 0x0a /* Public */,
 
  // signals: parameters
     QMetaType::Void, 0x80000000 | 3,    4,
     QMetaType::Void, QMetaType::QPointF,    6,
-    QMetaType::Void, QMetaType::QString, 0x80000000 | 9, 0x80000000 | 9, 0x80000000 | 12,    8,   10,   11,   13,
-    QMetaType::Void, 0x80000000 | 15,   16,
+    QMetaType::Void, QMetaType::QString, 0x80000000 | 9, 0x80000000 | 9, 0x80000000 | 12, 0x80000000 | 14,    8,   10,   11,   13,   15,
+    QMetaType::Void, 0x80000000 | 17,   18,
 
  // slots: parameters
-    QMetaType::Void, QMetaType::QString, 0x80000000 | 9, 0x80000000 | 9, 0x80000000 | 12,    8,   10,   11,   13,
+    QMetaType::Void, QMetaType::QString, 0x80000000 | 9, 0x80000000 | 9, 0x80000000 | 12, 0x80000000 | 14,    8,   10,   11,   13,   15,
     QMetaType::Void,
 
        0        // eod
@@ -106,9 +108,9 @@ void LogicalElement::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _
         switch (_id) {
         case 0: _t->connectSignal((*reinterpret_cast< std::vector<id_t>(*)>(_a[1]))); break;
         case 1: _t->coordsSignal((*reinterpret_cast< QPointF(*)>(_a[1]))); break;
-        case 2: _t->propSignal((*reinterpret_cast< QString(*)>(_a[1])),(*reinterpret_cast< ionum_t(*)>(_a[2])),(*reinterpret_cast< ionum_t(*)>(_a[3])),(*reinterpret_cast< std::vector<std::vector<value_t> >(*)>(_a[4]))); break;
+        case 2: _t->propSignal((*reinterpret_cast< QString(*)>(_a[1])),(*reinterpret_cast< ionum_t(*)>(_a[2])),(*reinterpret_cast< ionum_t(*)>(_a[3])),(*reinterpret_cast< std::vector<std::vector<value_t> >(*)>(_a[4])),(*reinterpret_cast< delay_t(*)>(_a[5]))); break;
         case 3: _t->delSignal((*reinterpret_cast< id_t(*)>(_a[1]))); break;
-        case 4: _t->propSlot((*reinterpret_cast< QString(*)>(_a[1])),(*reinterpret_cast< ionum_t(*)>(_a[2])),(*reinterpret_cast< ionum_t(*)>(_a[3])),(*reinterpret_cast< std::vector<std::vector<value_t> >(*)>(_a[4]))); break;
+        case 4: _t->propSlot((*reinterpret_cast< QString(*)>(_a[1])),(*reinterpret_cast< ionum_t(*)>(_a[2])),(*reinterpret_cast< ionum_t(*)>(_a[3])),(*reinterpret_cast< std::vector<std::vector<value_t> >(*)>(_a[4])),(*reinterpret_cast< delay_t(*)>(_a[5]))); break;
         case 5: _t->delSlot(); break;
         default: ;
         }
@@ -129,7 +131,7 @@ void LogicalElement::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _
             }
         }
         {
-            using _t = void (LogicalElement::*)(QString , ionum_t , ionum_t , std::vector<std::vector<value_t>> );
+            using _t = void (LogicalElement::*)(QString , ionum_t , ionum_t , std::vector<std::vector<value_t>> , delay_t );
             if (*reinterpret_cast<_t *>(_a[1]) == static_cast<_t>(&LogicalElement::propSignal)) {
                 *result = 2;
                 return;
@@ -202,9 +204,9 @@ void LogicalElement::coordsSignal(QPointF _t1)
 }
 
 // SIGNAL 2
-void LogicalElement::propSignal(QString _t1, ionum_t _t2, ionum_t _t3, std::vector<std::vector<value_t>> _t4)
+void LogicalElement::propSignal(QString _t1, ionum_t _t2, ionum_t _t3, std::vector<std::vector<value_t>> _t4, delay_t _t5)
 {
-    void *_a[] = { nullptr, const_cast<void*>(reinterpret_cast<const void*>(std::addressof(_t1))), const_cast<void*>(reinterpret_cast<const void*>(std::addressof(_t2))), const_cast<void*>(reinterpret_cast<const void*>(std::addressof(_t3))), const_cast<void*>(reinterpret_cast<const void*>(std::addressof(_t4))) };
+    void *_a[] = { nullptr, const_cast<void*>(reinterpret_cast<const void*>(std::addressof(_t1))), const_cast<void*>(reinterpret_cast<const void*>(std::addressof(_t2))), const_cast<void*>(reinterpret_cast<const void*>(std::addressof(_t3))), const_cast<void*>(reinterpret_cast<const void*>(std::addressof(_t4))), const_cast<void*>(reinterpret_cast<const void*>(std::addressof(_t5))) };
     QMetaObject::activate(this, &staticMetaObject, 2, _a);
 }
 

@@ -31,5 +31,7 @@ int saveFile(QString file_name);
 int loadFile(QString file_name, QGraphicsScene *scene, MainWindow *window);
 
 int updateScheme(unsigned max_iterations);
+int simulateScheme(MainWindow *window);
+int useSimulation(ticker_t time);
 
 #endif // METHODS_H

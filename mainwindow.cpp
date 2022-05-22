@@ -15,6 +15,7 @@ QString lib_file;
 
 extern QString current_file;
 extern level_t logic_level;
+extern ticker_t ticker;
 extern vector<LogicalElement *> all_elements;
 extern vector<Input_Output *> all_inOutputs;
 extern vector<Net *> all_nets;
@@ -27,35 +28,40 @@ MainWindow::MainWindow(QWidget *parent)
     el_index_to_save = -1;
     QObject::connect(&this->form_SLL, &Set_logic_level::logicLevelChanged, this, &MainWindow::onLogicLevelChanged);
     QObject::connect(&this->form_ETS, &el_to_save_form::box_value, this, &MainWindow::saveElById);
-    ui->setupUi(this);
+    this->ui->setupUi(this);
     QString title = "LogiTect";
     if (current_file != "")
         title = "LogiTect | " + current_file;
-    setWindowTitle(title);
+    this->setWindowTitle(title);
     this->logic_status = new QLabel(this);
     this->logic_status->setText("Logic level: undefined");
-    ui->statusBar->addWidget(logic_status, 1);
+    this->ui->statusBar->addWidget(logic_status, 1);
     this->resize(1280,720);
 
     this->scene = new QGraphicsScene(this);
     this->scene->setItemIndexMethod(QGraphicsScene::NoIndex);
 
-    ui->graphicsView->setMinimumSize(500, 500);
-    ui->graphicsView->setScene(scene);
-    ui->graphicsView->setRenderHint(QPainter::Antialiasing);
-    ui->graphicsView->setCacheMode(QGraphicsView::CacheBackground);
-    ui->graphicsView->setViewportUpdateMode(QGraphicsView::BoundingRectViewportUpdate);
-    scene->setSceneRect(QRect(0, 0, 1920, 1080));
+    this->ui->graphicsView->setMinimumSize(500, 500);
+    this->ui->graphicsView->setMaximumSize(1920, 1080);
+    this->ui->graphicsView->setScene(scene);
+    this->ui->graphicsView->setRenderHint(QPainter::Antialiasing);
+    this->ui->graphicsView->setCacheMode(QGraphicsView::CacheBackground);
+    this->ui->graphicsView->setViewportUpdateMode(QGraphicsView::BoundingRectViewportUpdate);
+    this->scene->setSceneRect(QRect(0, 0, 1920, 1080));
 
     for (auto i = 0; i <= 1920; i += 40)
         this->scene->addLine(i, 0, i, 1080, QPen(Qt::darkGray));
     for (auto i = 0; i <= 1080; i += 40)
         this->scene->addLine(0, i, 1920, i, QPen(Qt::darkGray));
-    ui->tab->setEnabled(false);
-    ui->pushButton->setEnabled(false);
-    ui->addNet->setEnabled(false);
-    ui->addInOut->setEnabled(false);
-    ui->connector->setEnabled(false);
+
+    this->ui->timeLabel->setText("Time: ");
+
+    this->ui->tab->setEnabled(false);
+    this->ui->pushButton->setEnabled(false);
+    this->ui->addNet->setEnabled(false);
+    this->ui->addInOut->setEnabled(false);
+    this->ui->connector->setEnabled(false);
+    this->enableUpdate(false);
 }
 
 MainWindow::~MainWindow() { delete ui; }
@@ -102,6 +108,12 @@ void MainWindow::delElSlot(id_t ID)
     all_elements.erase(isLIDExist(ID));
     for (size_t i = 0; i < all_elements.size(); i++)
         all_elements[i]->update();
+    if (all_elements.size() == 0)
+    {
+        this->ui->addNet->setEnabled(false);
+        this->ui->addInOut->setEnabled(false);
+        this->enableUpdate(false);
+    }
 }
 
 void MainWindow::delIOSlot(id_t ID)
@@ -126,6 +138,18 @@ void MainWindow::saveElById(id_t ID)
     lib_file = "";
 }
 
+void MainWindow::enableUpdate(bool _bool)
+{
+    this->ui->updateButton->setEnabled(_bool);
+    this->ui->simulateButton->setEnabled(_bool);
+    this->ui->plusTickerButton->setEnabled(_bool);
+    this->ui->minusTickerButton->setEnabled(_bool);
+    this->ui->tickerSlider->setEnabled(_bool);
+    this->ui->timeLabel->setEnabled(_bool);
+    this->ui->timeLineEdit->setEnabled(_bool);
+    this->ui->timeLineEdit->setText("0");
+}
+
 void MainWindow::on_pushButton_clicked()
 {
     LogicalElement *el = new LogicalElement;
@@ -139,6 +163,7 @@ void MainWindow::on_pushButton_clicked()
     this->scene->addItem(el);
     ui->addNet->setEnabled(true);
     ui->addInOut->setEnabled(true);
+    this->enableUpdate(true);
 }
 
 void MainWindow::on_addNet_clicked()
@@ -165,7 +190,7 @@ void MainWindow::onLogicLevelChanged(level_t value)
 {
     logic_level = value;
     this->logic_status->setText("Logic level: " + QString::number(logic_level));
-    ui->tab->setEnabled(true);
+    this->ui->tab->setEnabled(true);
     if (logic_level == 2)
         ui->tab_1->setEnabled(true);
     else
@@ -174,8 +199,8 @@ void MainWindow::onLogicLevelChanged(level_t value)
         ui->tab_2->setEnabled(true);
     else
         ui->tab_2->setEnabled(false);
-    ui->pushButton->setEnabled(true);
-    ui->connector->setEnabled(true);
+    this->ui->pushButton->setEnabled(true);
+    this->ui->connector->setEnabled(true);
 }
 
 void MainWindow::on_notButton_clicked()
@@ -191,8 +216,8 @@ void MainWindow::on_notButton_clicked()
         sort(all_elements.begin(), all_elements.end(), compLID);
     el->setPos(randomBetween(30, 200), randomBetween(30, 200));
     this->scene->addItem(el);
-    ui->addNet->setEnabled(true);
-    ui->addInOut->setEnabled(true);
+    this->ui->addNet->setEnabled(true);
+    this->ui->addInOut->setEnabled(true);
     {
         el->L_inputs.resize(1);
         el->L_outputs.resize(1);
@@ -206,6 +231,7 @@ void MainWindow::on_notButton_clicked()
             for (unsigned column = 0; column < output_num; column++)
                 el->T_outputs[row][column] = !row;
     }
+    this->enableUpdate(true);
 }
 
 
@@ -220,8 +246,8 @@ void MainWindow::on_andButton_clicked()
         sort(all_elements.begin(), all_elements.end(), compLID);
     el->setPos(randomBetween(30, 200), randomBetween(30, 200));
     this->scene->addItem(el);
-    ui->addNet->setEnabled(true);
-    ui->addInOut->setEnabled(true);
+    this->ui->addNet->setEnabled(true);
+    this->ui->addInOut->setEnabled(true);
     {
         el->L_inputs.resize(2);
         el->L_outputs.resize(1);
@@ -236,6 +262,7 @@ void MainWindow::on_andButton_clicked()
         el->T_outputs[3][0] = 1;
     }
     qDebug() << all_elements.size();
+    this->enableUpdate(true);
 }
 
 
@@ -250,8 +277,8 @@ void MainWindow::on_orButton_clicked()
         sort(all_elements.begin(), all_elements.end(), compLID);
     el->setPos(randomBetween(30, 200), randomBetween(30, 200));
     this->scene->addItem(el);
-    ui->addNet->setEnabled(true);
-    ui->addInOut->setEnabled(true);
+    this->ui->addNet->setEnabled(true);
+    this->ui->addInOut->setEnabled(true);
     {
         el->L_inputs.resize(2);
         el->L_outputs.resize(1);
@@ -265,8 +292,8 @@ void MainWindow::on_orButton_clicked()
         for (unsigned i = 1; i < rows; i++)
             el->T_outputs[i][0] = 1;
     }
+    this->enableUpdate(true);
 }
-
 
 void MainWindow::on_addInOut_clicked()
 {
@@ -293,11 +320,12 @@ void MainWindow::on_connector_clicked()
         sort(all_elements.begin(), all_elements.end(), compLID);
     el->setPos(randomBetween(30, 200), randomBetween(30, 200));
     this->scene->addItem(el);
-    ui->addNet->setEnabled(true);
-    ui->addInOut->setEnabled(true);
+    this->ui->addNet->setEnabled(true);
+    this->ui->addInOut->setEnabled(true);
     vector<vector<value_t>> input_table = makeInputTable(el->L_inputs.size(), logic_level);
     el->T_outputs = input_table;
     el->update();
+    this->enableUpdate(true);
 }
 
 void MainWindow::on_actionOpen_triggered()
@@ -309,8 +337,9 @@ void MainWindow::on_actionOpen_triggered()
         box.show();
     }
     current_file = QFileDialog::getOpenFileName(this, NULL, NULL, "LogiTect project (*.ltp);; All Files (*)");
-    loadFile(current_file, this->scene, this);
-    QString title = "LogiTect | " + current_file;
+    QString title;
+    if (loadFile(current_file, this->scene, this) >= 0)
+        title = "LogiTect | " + current_file;
     this->setWindowTitle(title);
 }
 
@@ -358,7 +387,7 @@ void MainWindow::on_updateButton_clicked()
 
 void MainWindow::on_simulateButton_clicked()
 {
-
+    simulateScheme(this);
 }
 
 void MainWindow::on_actionLoad_element_triggered()
@@ -379,8 +408,9 @@ void MainWindow::on_actionLoad_element_triggered()
         sort(all_elements.begin(), all_elements.end(), compLID);
     el->setPos(randomBetween(30, 200), randomBetween(30, 200));
     this->scene->addItem(el);
-    ui->addNet->setEnabled(true);
-    ui->addInOut->setEnabled(true);
+    this->ui->addNet->setEnabled(true);
+    this->ui->addInOut->setEnabled(true);
+    this->enableUpdate(true);
 }
 
 void MainWindow::on_actionSave_element_triggered()
@@ -416,6 +446,7 @@ void MainWindow::on_actionNew_project_triggered()
 //        box.warning(nullptr, "Warning", "Save your project, if you don't want to lose it");
 //        box.show();
 //    }
+    this->setWindowTitle("LogiTect");
     this->scene->clear();
     for (auto i = 0; i <= 1920; i += 40)
         this->scene->addLine(i, 0, i, 1080, QPen(Qt::darkGray));
@@ -424,4 +455,34 @@ void MainWindow::on_actionNew_project_triggered()
     all_elements.resize(0);
     all_nets.resize(0);
     all_inOutputs.resize(0);
+    ticker = 0;
+    current_file = "";
+    this->ui->addNet->setEnabled(false);
+    this->ui->addInOut->setEnabled(false);
+    this->enableUpdate(false);
+}
+
+void MainWindow::on_plusTickerButton_clicked() {
+    if ((int)ticker < this->ui->tickerSlider->maximum())
+        ticker++;
+    this->ui->timeLineEdit->setText(QString::number(ticker));
+    this->ui->tickerSlider->setValue(ticker);
+    useSimulation(ticker);
+}
+void MainWindow::on_minusTickerButton_clicked() {
+    if ((int)ticker > this->ui->tickerSlider->minimum())
+        ticker--;
+    this->ui->timeLineEdit->setText(QString::number(ticker));
+    this->ui->tickerSlider->setValue(ticker);
+    useSimulation(ticker);
+}
+void MainWindow::on_tickerSlider_valueChanged(int value) {
+    ticker = value;
+    this->ui->timeLineEdit->setText(QString::number(ticker));
+    useSimulation(ticker);
+}
+void MainWindow::on_timeLineEdit_textChanged(const QString &arg1) {
+    ticker = arg1.toULongLong();
+    this->ui->tickerSlider->setValue(ticker);
+    useSimulation(ticker);
 }

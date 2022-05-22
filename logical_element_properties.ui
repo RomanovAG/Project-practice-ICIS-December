@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>400</width>
-    <height>300</height>
+    <height>306</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -44,6 +44,18 @@
        </property>
        <property name="text">
         <string>Number of outputs</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLabel" name="label_7">
+       <property name="font">
+        <font>
+         <pointsize>12</pointsize>
+        </font>
+       </property>
+       <property name="text">
+        <string>Delay</string>
        </property>
       </widget>
      </item>
@@ -110,6 +122,15 @@
      </item>
      <item>
       <widget class="QSpinBox" name="outputNumBox">
+       <property name="font">
+        <font>
+         <pointsize>12</pointsize>
+        </font>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QSpinBox" name="delayBox">
        <property name="font">
         <font>
          <pointsize>12</pointsize>

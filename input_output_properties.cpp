@@ -33,7 +33,7 @@ void Input_Output_Properties::on_buttonBox_accepted()
         is_input = false;
         io_id = this->ui->outputBox->value();
     }
-    emit valueChanged(this->ui->valueBox->value(), this->ui->IDBox->value(), io_id, is_input);
+    emit this->valueChanged(this->ui->valueBox->value(), this->ui->IDBox->value(), io_id, is_input);
     this->close();
 }
 
@@ -61,5 +61,5 @@ void Input_Output_Properties::on_buttonBox_rejected()
     this->close();
 }
 
-void Input_Output_Properties::on_delButton_clicked() { emit delSignal(); this->close(); }
+void Input_Output_Properties::on_delButton_clicked() { emit this->delSignal(); this->close(); }
 

@@ -31,6 +31,7 @@ public:
     QVBoxLayout *verticalLayout;
     QLabel *label;
     QLabel *label_2;
+    QLabel *label_7;
     QFrame *line;
     QPushButton *delButton;
     QLabel *label_3;
@@ -39,6 +40,7 @@ public:
     QVBoxLayout *verticalLayout_2;
     QSpinBox *inputNumBox;
     QSpinBox *outputNumBox;
+    QSpinBox *delayBox;
     QGridLayout *gridLayout_2;
     QTextEdit *inputsTextEdit;
     QTextEdit *outputsTextEdit;
@@ -50,7 +52,7 @@ public:
     {
         if (Logical_Element_Properties->objectName().isEmpty())
             Logical_Element_Properties->setObjectName(QString::fromUtf8("Logical_Element_Properties"));
-        Logical_Element_Properties->resize(400, 300);
+        Logical_Element_Properties->resize(400, 306);
         gridLayout = new QGridLayout(Logical_Element_Properties);
         gridLayout->setObjectName(QString::fromUtf8("gridLayout"));
         OK = new QPushButton(Logical_Element_Properties);
@@ -73,6 +75,12 @@ public:
         label_2->setFont(font);
 
         verticalLayout->addWidget(label_2);
+
+        label_7 = new QLabel(Logical_Element_Properties);
+        label_7->setObjectName(QString::fromUtf8("label_7"));
+        label_7->setFont(font);
+
+        verticalLayout->addWidget(label_7);
 
 
         gridLayout->addLayout(verticalLayout, 1, 0, 1, 1);
@@ -125,6 +133,12 @@ public:
 
         verticalLayout_2->addWidget(outputNumBox);
 
+        delayBox = new QSpinBox(Logical_Element_Properties);
+        delayBox->setObjectName(QString::fromUtf8("delayBox"));
+        delayBox->setFont(font);
+
+        verticalLayout_2->addWidget(delayBox);
+
 
         gridLayout->addLayout(verticalLayout_2, 1, 3, 1, 1);
 
@@ -170,6 +184,7 @@ public:
         OK->setText(QCoreApplication::translate("Logical_Element_Properties", "OK", nullptr));
         label->setText(QCoreApplication::translate("Logical_Element_Properties", "Number of inputs", nullptr));
         label_2->setText(QCoreApplication::translate("Logical_Element_Properties", "Number of outputs", nullptr));
+        label_7->setText(QCoreApplication::translate("Logical_Element_Properties", "Delay", nullptr));
         delButton->setText(QCoreApplication::translate("Logical_Element_Properties", "Delete", nullptr));
         label_3->setText(QCoreApplication::translate("Logical_Element_Properties", "Truth table", nullptr));
         label_6->setText(QCoreApplication::translate("Logical_Element_Properties", "Name", nullptr));

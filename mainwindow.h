@@ -56,6 +56,14 @@ private slots:
 
     void on_actionLoad_element_triggered();
 
+    void on_plusTickerButton_clicked();
+
+    void on_minusTickerButton_clicked();
+
+    void on_tickerSlider_valueChanged(int value);
+
+    void on_timeLineEdit_textChanged(const QString &arg1);
+
 public slots:
     void onLogicLevelChanged(level_t value);
     void connectSlot(std::vector<id_t> ids);
@@ -69,5 +77,6 @@ public:
     QLabel *logic_status;
     Set_logic_level form_SLL;
     el_to_save_form form_ETS;
+    void enableUpdate(bool _bool);
 };
 #endif // MAINWINDOW_H
